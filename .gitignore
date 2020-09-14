@@ -1,0 +1,7 @@
+# Project exclude paths
+/out/
+/.idea
+/lib
+LibraryJSF.iml
+.gitignore
+/.gitignore
