@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -10,40 +10,47 @@
     <title>#{msg['head.title']}</title>
 </h:head>
 <h:body>
-<!--    <f:view>-->
-        <div class="main">
-            <div class="content">
-                <p class="title"><span
-                        class="text"><h:graphicImage styleClass="emblem" library="images" name="shelf_n.png"
-                                                     alt="Library emblem"/></span></p>
-                <p class="title">#{msg['welcome.title']}</p>
-                <p class="text">
-                    <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem corporis debitis illum inventore porro possimus quam quasi! Aperiam beatae cum, ex id in iure neque, nesciunt obcaecati omnis quisquam vero.</span>
-                </p>
-                <p class="text">
-                    <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur dolore inventore non obcaecati possimus quam quibusdam reiciendis repellendus sit vero? Asperiores atque earum enim, facilis odio qui rerum suscipit tempore?</span>
-                </p>
-                <p class="text">
-                    <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, aliquam dicta dolorem doloremque earum enim exercitationem explicabo facilis ipsum iusto libero nisi nobis odit praesentium sequi sint ullam? Ad, itaque!</span>
-                </p>
-                <p>&nbsp;</p>
-            </div>
-            <div class="login_div">
-                <p class="title">#{msg['input.info']} </p>
-                <h:form styleClass="login_form" enctype="charset=UTF-8">
-                    <h:outputLabel value="#{msg['input.name']}" for="username"/>
-                    <h:inputText id="username" value="#{user.username}" size="20"/>
-                    <!--                <input type="submit" value="Enter"/>-->
-<!--                    <h:outputLabel value="#{msg['enter.button']}" for="send_button"/>-->
-                    <h:commandButton value="#{msg['enter.button']}" onclick="alert('Hello!');"/>
-                </h:form>
 
-            </div>
-            <div class="footer">
-                Kirilo @ 2020
-            </div>
+    <div class="main">
+        <div class="content">
+            <p class="title"><span
+                    class="text"><h:graphicImage styleClass="emblem" library="images" name="shelf_n.png"
+                                                 alt="Library emblem"/></span></p>
+            <p class="title">#{msg['welcome.title']}</p>
+            <p class="text">
+                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem corporis debitis illum inventore porro possimus quam quasi! Aperiam beatae cum, ex id in iure neque, nesciunt obcaecati omnis quisquam vero.</span>
+            </p>
+            <p class="text">
+                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur dolore inventore non obcaecati possimus quam quibusdam reiciendis repellendus sit vero? Asperiores atque earum enim, facilis odio qui rerum suscipit tempore?</span>
+            </p>
+            <p class="text">
+                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, aliquam dicta dolorem doloremque earum enim exercitationem explicabo facilis ipsum iusto libero nisi nobis odit praesentium sequi sint ullam? Ad, itaque!</span>
+            </p>
+            <p>&nbsp;</p>
         </div>
-<!--    </f:view>-->
+        <div class="login_div">
+            <p class="title">#{msg['input.info']} </p>
+            <h:form styleClass="login_form" enctype="charset=UTF-8">
+                <h:outputLabel value="#{msg['input.name']}" for="username"/>
+                <h:inputText id="username" value="#{user.username}" size="20" required="true"
+                             requiredMessage="#{msg['login.required']}">
+                    <f:validator validatorId="com.kirilo.validators.LoginValidator"/>
+                </h:inputText>
+                <!--                <input type="submit" value="Enter"/>-->
+                <!--                    <h:outputLabel value="#{msg['enter.button']}" for="send_button"/>-->
+                <!--                <h:commandButton value="#{msg['enter.button']}" action="#{loginController.login}"/>-->
+                <!--                <h:commandButton value="#{msg['enter.button']}" action="books"/>-->
+
+                <!--                https://qna.habr.com/q/413121 -->
+                <h:commandButton value="#{msg['enter.button']}" action="pages/books?faces-redirect=true"/>
+                <p><h:message for="username" styleClass="error"/></p>
+            </h:form>
+
+        </div>
+        <div class="footer">
+            Kirilo @ 2020
+        </div>
+    </div>
 
 </h:body>
 </html>

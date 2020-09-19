@@ -1,12 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+<faces-config version="2.0"
+              xmlns="http://java.sun.com/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-              version="2.0">
-  <application>
-      <resource-bundle>
-          <base-name>com.kirilo.filters.Text</base-name>
-          <var>msg</var>
-      </resource-bundle>
-  </application>
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    <application>
+        <resource-bundle>
+            <base-name>com.kirilo.utils.Text</base-name>
+            <var>msg</var>
+        </resource-bundle>
+    </application>
+<!--    https://qna.habr.com/q/413121 -->
+    <navigation-rule>
+        <from-view-id>/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>books</from-outcome>
+            <to-view-id>/pages/books.xhtml</to-view-id>
+<!--            <redirect/>-->
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

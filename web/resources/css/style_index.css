@@ -52,8 +52,12 @@ body {
 }
 
 .emblem {
-    width:76px;
+    width: 76px;
     height: 77px;
-    hspace:10px;
-    vspace:10px;
+    hspace: 10px;
+    vspace: 10px;
+}
+
+.error {
+    color: red;
 }
