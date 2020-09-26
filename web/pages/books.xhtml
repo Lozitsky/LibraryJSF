@@ -2,9 +2,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
+      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+<!--<f:view>
     <h:outputLabel value="Hello from Facelets!"/>
-</f:view>
+</f:view>-->
+<h:head>
+    <title>Books facelet</title>
+</h:head>
+<h:body>
+    <ui:composition template="/templates/library.xhtml">
+        <ui:define name="title">
+            #{msg.book_list}
+        </ui:define>
+        <ui:define name="content">
+            text content
+        </ui:define>
+    </ui:composition>
+
+</h:body>
 </html>

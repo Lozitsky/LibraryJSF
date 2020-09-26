@@ -1,11 +1,15 @@
-body {
+.body {
     font: 24px Helvetica;
     background: #999999;
 }
 
 .header {
+    /*width: auto;*/
     display: flex;
+    /*padding: 0;*/
+    /*margin: 0;*/
     /*margin: 1em;*/
+    /*flex-flow: row;*/
 }
 
 .item {
@@ -21,6 +25,10 @@ body {
     margin-left: auto;
 }
 
+/*.item > .move-right {
+    margin-left: auto;
+}*/
+
 h3 {
     text-align: center;
 }
@@ -35,7 +43,7 @@ h3 {
     flex-flow: row;
 }
 
-#search {
+.search {
     min-height: 50px;
     margin: 0px;
     padding: 0px;
@@ -47,7 +55,7 @@ h3 {
     flex-flow: row;
 }
 
-header, #search > *, #main > *, footer {
+.header, .search > *, #main > *, .footer {
     margin: 4px;
     padding: 5px;
     border-radius: 7pt;
@@ -55,7 +63,7 @@ header, #search > *, #main > *, footer {
     background: #ccccff;
 }
 
-#main > nav {
+#main > .nav {
     flex: 1 6 25%;
 }
 
@@ -63,22 +71,23 @@ header, #search > *, #main > *, footer {
     flex: 1 6 75%;
 }
 
-#search > #search-logo {
+.search > .search-logo {
     flex: 1 6 5%;
 }
 
 
-#search > #search-field {
+.search > .search-field {
     flex: 1 6 85%;
 }
 
-#search > #search-box {
+.search > #search-box {
     flex: 1 6 20%;
     min-width: 168px;
 }
 
-header, footer {
-    display: block;
+.header, .footer {
+    /*display: block;*/
+    display: flex;
     margin: 4px;
     padding: 5px;
     min-height: 100px;
