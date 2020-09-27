@@ -3,7 +3,7 @@
         PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets" xml:lang="en" lang="en">
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xml:lang="en" lang="en">
 <h:head>
     <title>Title</title>
     <h:outputStylesheet library="css" name="main.css"/>
@@ -13,7 +13,9 @@
         <h4>#{msg['genres']}</h4>
         <h:dataTable value="#{genreList.genres}" var="gl">
             <h:column>
-                #{gl.name}
+                <h:link value="#{gl.name}">
+                    <f:param name="genre_id" value="#{gl.id}"/>
+                </h:link>
             </h:column>
         </h:dataTable>
     </ui:composition>
