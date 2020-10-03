@@ -2,9 +2,10 @@ package com.kirilo.beans;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class User {
     private String username;
 

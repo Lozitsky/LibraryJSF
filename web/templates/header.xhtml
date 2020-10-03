@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xml:lang="en" lang="en">
 <h:head>
@@ -13,39 +14,39 @@
 
 <h:body>
     <ui:composition>
-<!--        <div style="display: flex; flex-flow: column; width: 100%">-->
-            <div class="header">
+        <!--        <div style="display: flex; flex-flow: column; width: 100%">-->
+        <div class="header">
 
-                <div class="item">
-                    <h:graphicImage library="images" name="library.png" alt="Logo"/>
-                </div>
-
-                <div class="item">
-                    <h3>#{msg['welcome.title']}</h3>
-                </div>
-
-                <div class="item move-right">
-                    <div>
-                        <strong>#{msg['welcome.info']}</strong>
-                    </div>
-                    <div class="move-right">
-                        <strong>#{msg['exit']}</strong>
-                    </div>
-                </div>
+            <div class="item">
+                <h:graphicImage library="images" name="library.png" alt="Logo"/>
             </div>
 
-            <h:form id="search" styleClass="search">
-                <h:graphicImage styleClass="search-logo" library="images" name="search.jpg" alt="Logo"/>
-                <h:inputText id="search-field" styleClass="search-field"/>
-                <div id="search-box">
-                    <h:commandButton value="#{msg.search}" styleClass="modern-button"/>
+            <div class="item">
+                <h3>#{msg['welcome.title']}</h3>
+            </div>
 
-                    <h:selectOneMenu value="#{search.searchType}">
-                        <f:selectItems value="#{search.typeMap}"/>
-                    </h:selectOneMenu>
+            <div class="item move-right">
+                <div>
+                    <strong>#{msg['welcome.info']}, #{user.username}</strong>
                 </div>
-            </h:form>
-<!--        </div>-->
+                <div class="move-right">
+                    <a href="#">#{msg['exit']}</a>
+                </div>
+            </div>
+        </div>
+
+        <h:form id="search" styleClass="search">
+            <h:graphicImage styleClass="search-logo" library="images" name="search.jpg" alt="Logo"/>
+            <h:inputText id="search-field" styleClass="search-field"/>
+            <div id="search-box">
+                <h:commandButton value="#{msg.search}" styleClass="modern-button"/>
+
+                <h:selectOneMenu value="#{search.searchType}">
+                    <f:selectItems value="#{search.typeMap}"/>
+                </h:selectOneMenu>
+            </div>
+        </h:form>
+        <!--        </div>-->
 
     </ui:composition>
 </h:body>

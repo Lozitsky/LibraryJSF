@@ -11,13 +11,19 @@
 <h:body>
     <ui:composition>
         <h4>#{msg['genres']}</h4>
-        <h:dataTable value="#{genreList.genres}" var="gl">
-            <h:column>
-                <h:link value="#{gl.name}">
-                    <f:param name="genre_id" value="#{gl.id}"/>
-                </h:link>
-            </h:column>
-        </h:dataTable>
+        <h:form>
+            <h:dataTable value="#{genreList.genres}" var="gl">
+                <h:column>
+                    <!--                    <h:link value="#{gl.name}">-->
+                    <!--                        <f:param name="genre_id" value="#{gl.id}"/>-->
+                    <!--                    </h:link>-->
+                    <h:commandLink action="#{bookList.getBooksByGenre}" value="#{gl.name}">
+                        <f:param name="genre_id" value="#{gl.id}"/>
+                    </h:commandLink>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+
     </ui:composition>
 </h:body>
 </html>
