@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 @ManagedBean
 @SessionScoped
 public class Search implements Serializable {
-    static final long serialVersionUID = 5977375980978964005L;
+    static final long serialVersionUID = -5929977093130714822L;
     private static Map<String, SearchType> typeMap;
     private SearchType searchType;
 

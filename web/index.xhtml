@@ -1,9 +1,10 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xml:lang="en" lang="en">
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <h:outputStylesheet library="css" name="style_index.css"/>
@@ -36,13 +37,9 @@
                              requiredMessage="#{msg['login.required']}">
                     <f:validator validatorId="com.kirilo.validators.LoginValidator"/>
                 </h:inputText>
-                <!--                <input type="submit" value="Enter"/>-->
-                <!--                    <h:outputLabel value="#{msg['enter.button']}" for="send_button"/>-->
-                <!--                <h:commandButton value="#{msg['enter.button']}" action="#{loginController.login}"/>-->
-                <!--                <h:commandButton value="#{msg['enter.button']}" action="books"/>-->
-
                 <!--                https://qna.habr.com/q/413121 -->
-                <h:commandButton value="#{msg['enter.button']}" action="pages/books?faces-redirect=true"/>
+                <h:commandButton action="/pages/books?faces-redirect=true" value="#{msg['enter.button']}"/>
+
                 <p><h:message for="username" styleClass="error"/></p>
             </h:form>
 
@@ -54,3 +51,4 @@
 
 </h:body>
 </html>
+        <!--                <h:commandButton value="#{msg['enter.button']}" action="pages/books?faces-redirect=true"/>-->

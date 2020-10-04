@@ -14,7 +14,6 @@
 
 <h:body>
     <ui:composition>
-        <!--        <div style="display: flex; flex-flow: column; width: 100%">-->
         <div class="header">
 
             <div class="item">
@@ -29,9 +28,10 @@
                 <div>
                     <strong>#{msg['welcome.info']}, #{user.username}</strong>
                 </div>
-                <div class="move-right">
-                    <a href="#">#{msg['exit']}</a>
-                </div>
+                <h:form class="move-right">
+                    <h:commandLink action="#{loginController.goToIndex}"
+                                   value="#{msg['exit']}"/>
+                </h:form>
             </div>
         </div>
 
@@ -46,7 +46,6 @@
                 </h:selectOneMenu>
             </div>
         </h:form>
-        <!--        </div>-->
 
     </ui:composition>
 </h:body>

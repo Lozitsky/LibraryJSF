@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xml:lang="en" lang="en">
+
+<!-- https://mkyong.com/jsf2/jsf-2-repeat-tag-example/ -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xml:lang="en" lang="en">
 <h:head>
     <title>Title</title>
     <h:outputStylesheet library="css" name="main.css"/>
@@ -12,16 +17,17 @@
     <ui:composition>
         <h4>#{msg['genres']}</h4>
         <h:form>
-            <h:dataTable value="#{genreList.genres}" var="gl">
-                <h:column>
-                    <!--                    <h:link value="#{gl.name}">-->
-                    <!--                        <f:param name="genre_id" value="#{gl.id}"/>-->
-                    <!--                    </h:link>-->
-                    <h:commandLink action="#{bookList.getBooksByGenre}" value="#{gl.name}">
-                        <f:param name="genre_id" value="#{gl.id}"/>
-                    </h:commandLink>
-                </h:column>
-            </h:dataTable>
+            <table>
+                <ui:repeat value="#{genreList.genres}" var="gl" varStatus="status">
+                    <tr>
+                        <td>
+                            <h:commandLink action="#{bookList.getBookByGenre}" value="#{gl.name}">
+                                <f:param name="genre_id" value="#{gl.id}"/>
+                            </h:commandLink>
+                        </td>
+                    </tr>
+                </ui:repeat>
+            </table>
         </h:form>
 
     </ui:composition>

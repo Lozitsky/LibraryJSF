@@ -10,13 +10,27 @@
             <var>msg</var>
         </resource-bundle>
     </application>
+
 <!--    https://qna.habr.com/q/413121 -->
-    <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
+
+<!--    <navigation-rule>
+        <from-view-id>/pages/index.xhtml</from-view-id>
         <navigation-case>
+            <from-action>#{loginController.login}</from-action>
             <from-outcome>books</from-outcome>
             <to-view-id>/pages/books.xhtml</to-view-id>
-<!--            <redirect/>-->
+&lt;!&ndash;            <redirect/>&ndash;&gt;
+        </navigation-case>
+    </navigation-rule>-->
+
+<!--    https://www.tutorialspoint.com/jsf/jsf_page_navigation.htm -->
+    <navigation-rule>
+        <from-view-id>/pages/books.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{loginController.goToIndex}</from-action>
+            <from-outcome>index</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 </faces-config>

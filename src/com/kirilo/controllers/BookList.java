@@ -6,7 +6,6 @@ import com.kirilo.db.Database;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -22,14 +21,13 @@ import java.util.logging.Logger;
 @ManagedBean(eager = true)
 @RequestScoped
 public class BookList implements Serializable {
-    static final long serialVersionUID = 2492147478586933878L;
+    private static final long serialVersionUID = 1353727775955418805L;
     @ManagedProperty(value = "#{search}")
     private Search search;
     private List<Book> books;
 
     public BookList() {
         books = new ArrayList<>();
-//        books.addAll(getAllBooks());
     }
 
     public Search getSearch() {
@@ -42,31 +40,24 @@ public class BookList implements Serializable {
 
     public List<Book> getBooks() {
         if (books.isEmpty()) {
-//            books.addAll(getAllBooks());
-            return getAllBooks();
+//            books = getAllBooks();
         }
         return books;
     }
 
     public List<Book> getAllBooks() {
-//        if (books.isEmpty()) {
-//        books = getBooksFromDB("select * from book");
-
-        books = getBooksFromDB("select b.id, b.name, b.page_count, b.isbn, b.publish_year, b.description, "
+        return getBooksFromDB("select b.id, b.name, b.page_count, b.isbn, b.publish_year, b.description, "
                 + "g.name as genre, a.full_name as author, p.name as publisher from book b "
                 + "inner join genre g on b.genre_id=g.id "
                 + "inner join author a on b.author_id=a.id "
                 + "inner join publisher p on b.publisher_id=p.id "
                 + " order by b.name"
         );
-//        }
-        return books;
     }
 
     private List<Book> getBooksFromDB(String query) {
         books.clear();
         try (
-//                Connection connection = Database.getConnection();
                 Statement statement = (Database.getConnection()).createStatement();
                 ResultSet resultSet = statement.executeQuery(query)
         ) {
@@ -89,16 +80,14 @@ public class BookList implements Serializable {
         return books;
     }
 
-    /*int id*/
-    public List<Book> getBooksByGenre() {
-//        final Map<String, String> parameterMap = getRequestParameters();
+    public List<Book> getBookByGenre() {
         int id = Integer.parseInt(getRequestParameters().get("genre_id"));
         return getBooksFromDB(
                 "select b.id, b.name, b.page_count, b.isbn, b.publish_year, b.description, "
                         + "g.name as genre, a.full_name as author, p.name as publisher from book b "
                         + "inner join genre g on b.genre_id=g.id "
                         + "inner join author a on b.author_id=a.id "
-                        + "inner join publisher p on b.publisher_id=p.id "
+                           + "inner join publisher p on b.publisher_id=p.id "
                         + "where genre_id=" + id
                         + " order by b.name"
         );
@@ -106,26 +95,23 @@ public class BookList implements Serializable {
 
     private Map<String, String> getRequestParameters() {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-//        return parameterMap;
     }
 
-    /*char c*/
+
     public List<Book> getBooksByLetter() {
-        final String ch = getRequestParameters().get("letter").substring(0, 0).toLowerCase();
+        String ch = getRequestParameters().get("letter_id").substring(0, 1).toLowerCase();
         return getBooksFromDB(
                 "select b.id, b.name, b.page_count, b.isbn, b.publish_year, b.description, "
                         + "g.name as genre, a.full_name as author, p.name as publisher from book b "
                         + "inner join genre g on b.genre_id=g.id "
                         + "inner join author a on b.author_id=a.id "
                         + "inner join publisher p on b.publisher_id=p.id "
-                        + "where b.name like '" + /*String.valueOf(c).toLowerCase()*/ ch + "%'"
+                        + "where b.name like '" + ch + "%'"
                         + " order by b.name"
         );
     }
 
-    /*String s, String type*/
     public List<Book> getBooksByString() {
-//        final String s_type = (SearchType.valueOf(type.toUpperCase()) == SearchType.AUTHOR ? "a.full_name" : "b.name");
         final String s_type = String.valueOf(search.getSearchType());
         final String s = getRequestParameters().get("search_atr");
         return getBooksFromDB(

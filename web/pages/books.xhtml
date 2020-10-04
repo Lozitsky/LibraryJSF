@@ -2,8 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
->
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+      xml:lang="en" lang="en">
 <!--<f:view>
     <h:outputLabel value="Hello from Facelets!"/>
 </f:view>-->
@@ -20,12 +21,17 @@
         <ui:define name="content">
             <!--            #{param.genre_id}-->
             <!--            https://stackoverflow.com/a/29056931/9586230 -->
-            <div class="letters">
+<!--            <div class="letters">-->
                 <!--            <h5>Some alphabet</h5>-->
-                <ui:repeat value="#{letterList.chars}" var="letter" varStatus="metadata">
-                    <a class="letter" href="#">#{letter}</a>
-                </ui:repeat>
-            </div>
+                <h:form class="letters">
+                    <ui:repeat value="#{letterList.chars}" var="letter" varStatus="metadata">
+<!--                        <a class="letter" href="#">#{letter}</a>-->
+                        <h:commandLink action="#{bookList.getBooksByLetter}" value="#{letter}">
+                            <f:param name="letter_id" value="#{letter}"/>
+                        </h:commandLink>
+                    </ui:repeat>
+                </h:form>
+<!--            </div>-->
             <p><strong>#{msg['book.count']} #{bookList.books.size()}</strong></p>
             <p style="width: 100%">
                 <h:dataTable value="#{bookList.books}" var="book" cellspacing="10px"
