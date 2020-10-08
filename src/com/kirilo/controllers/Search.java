@@ -10,12 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-@ManagedBean
+@ManagedBean(eager = true)
 @SessionScoped
 public class Search implements Serializable {
     static final long serialVersionUID = -5929977093130714822L;
     private static Map<String, SearchType> typeMap;
     private SearchType searchType;
+    private String searchString;
 
     public Search() {
         typeMap = new HashMap<>();
@@ -30,5 +31,17 @@ public class Search implements Serializable {
 
     public SearchType getSearchType() {
         return searchType;
+    }
+
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
+    }
+
+    public void setSearchType(SearchType searchType) {
+        this.searchType = searchType;
     }
 }

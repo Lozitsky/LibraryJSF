@@ -37,9 +37,9 @@
 
         <h:form id="search" styleClass="search">
             <h:graphicImage styleClass="search-logo" library="images" name="search.jpg" alt="Logo"/>
-            <h:inputText id="search-field" styleClass="search-field"/>
+            <h:inputText id="search-field" styleClass="search-field" value="#{search.searchString}"/>
             <div id="search-box">
-                <h:commandButton value="#{msg.search}" styleClass="modern-button"/>
+                <h:commandButton value="#{msg.search}" styleClass="modern-button" action="#{bookList.getBooksByString()}"/>
 
                 <h:selectOneMenu value="#{search.searchType}">
                     <f:selectItems value="#{search.typeMap}"/>

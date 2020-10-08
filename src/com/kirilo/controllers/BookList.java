@@ -2,6 +2,7 @@ package com.kirilo.controllers;
 
 import com.kirilo.beans.Book;
 import com.kirilo.db.Database;
+import com.kirilo.enums.SearchType;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -112,8 +113,9 @@ public class BookList implements Serializable {
     }
 
     public List<Book> getBooksByString() {
-        final String s_type = String.valueOf(search.getSearchType());
-        final String s = getRequestParameters().get("search_atr");
+        final String s_type = (search.getSearchType() == SearchType.AUTHOR ? "a.full_name" : "b.name");
+        final String s = search.getSearchString();
+
         return getBooksFromDB(
                 "select b.id, b.name, b.page_count, b.isbn, b.publish_year, b.description, "
                         + "g.name as genre, a.full_name as author, p.name as publisher from book b "
