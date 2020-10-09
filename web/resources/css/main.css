@@ -17,6 +17,14 @@
     flex-flow: column;
 }
 
+.pager {
+    display: flex;
+    align-items: center;
+}
+.selected {
+    color: red;
+}
+
 #exit_link {
     /*flex-flow: column;*/
 }

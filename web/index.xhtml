@@ -38,7 +38,9 @@
                     <f:validator validatorId="com.kirilo.validators.LoginValidator"/>
                 </h:inputText>
                 <!--                https://qna.habr.com/q/413121 -->
-                <h:commandButton action="/pages/books?faces-redirect=true" value="#{msg['enter.button']}"/>
+                <h:commandButton action="/pages/books?faces-redirect=true" value="#{msg['enter.button']}">
+                    <f:param name="books" value="#{bookList.allBooks}"/>
+                </h:commandButton>
 
                 <p><h:message for="username" styleClass="error"/></p>
             </h:form>
