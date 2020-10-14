@@ -16,31 +16,25 @@
         <ui:define name="title">
             #{msg.book_list}
         </ui:define>
+
+        <ui:define name="letters">
+            <ui:repeat value="#{letterList.chars}" var="letter" varStatus="metadata">
+                <h:commandLink action="#{bookList.getBooksByLetter}" value="#{letter}"
+                               styleClass="#{letter.toString() == search.selectedChar ? 'selected' : ''}">
+                    <f:param name="letter_id" value="#{letter}"/>
+                </h:commandLink>
+            </ui:repeat>
+        </ui:define>
+
+        <ui:define name="count">
+            <strong>#{msg['book.count']} #{search.totalBooksCount}</strong>
+        </ui:define>
+
         <ui:define name="content">
             <!--            #{param.genre_id}-->
             <!--            https://stackoverflow.com/a/29056931/9586230 -->
-            <h:form class="letters">
-                <ui:repeat value="#{letterList.chars}" var="letter" varStatus="metadata">
-                    <h:commandLink action="#{bookList.getBooksByLetter}" value="#{letter}"
-                                   styleClass="#{letter.toString() == search.selectedChar ? 'selected' : ''}">
-                        <f:param name="letter_id" value="#{letter}"/>
-                    </h:commandLink>
-                </ui:repeat>
-            </h:form>
-            <p class="item">
-                <strong>#{msg['book.count']} #{search.totalBooksCount}</strong>
-            </p>
-            <p class="move-right">
-                <h:form styleClass="pager" rendered="#{search.totalBooksCount > search.booksOnPage}">
-                    #{msg.pager}
-                    <ui:repeat value="#{search.listPageNumbers}" var="pageNumber">
-                        <h:commandLink value="#{pageNumber}" action="#{bookList.selectPage}"
-                                       styleClass="#{pageNumber == search.selectedPage ? 'selected' : ''}">
-                            <f:param name="page_number" value="#{pageNumber}"/>
-                        </h:commandLink>
-                    </ui:repeat>
-                </h:form>
-            </p>
+
+
             <!--            <p style="width: 100%">-->
             <h:dataTable value="#{bookList.books}" var="book" cellspacing="10px"
                          columnClasses="book, book, book" styleClass="books">
@@ -54,6 +48,12 @@
                     <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>
                     <p><strong>#{msg['publish.year']}: </strong>#{book.publishYear}</p>
                     <p><strong>#{msg.isbn}: </strong>#{book.isbn}</p>
+<!--                    <p><h:outputLink value="pdf_book.xhtml" target="_blank">read</h:outputLink></p>-->
+                    <h:form>
+                        <h:commandLink action="pdf_book" target="_blank" value="read">
+                            <f:param name="id" value="#{book.id}"/>
+                        </h:commandLink>
+                    </h:form>
                 </h:column>
                 <h:column>
                     <!--                            <div class="book_info">-->
@@ -63,22 +63,54 @@
                 </h:column>
 
             </h:dataTable>
-            <!--            </p>-->
-
-<!--            <div class="pager">-->
-                <h:form styleClass="pager" rendered="#{search.totalBooksCount > search.booksOnPage}">
-                    #{msg.pager}
-                    <ui:repeat value="#{search.listPageNumbers}" var="pageNumber">
-                        <h:commandLink value="#{pageNumber}" action="#{bookList.selectPage}"
-                                       styleClass="#{pageNumber == search.selectedPage ? 'selected' : ''}">
-                            <f:param name="page_number" value="#{pageNumber}"/>
-                        </h:commandLink>
-                    </ui:repeat>
-                </h:form>
-<!--            </div>-->
-
         </ui:define>
+
+
+        <ui:define name="paginator">
+            <h:form styleClass="pager" rendered="#{search.totalBooksCount > search.booksOnPage}">
+                #{msg.pager}
+                <ui:repeat value="#{search.listPageNumbers}" var="pageNumber">
+                    <h:commandLink value="#{pageNumber}" action="#{bookList.selectPage}"
+                                   styleClass="#{pageNumber == search.selectedPage ? 'selected' : ''}">
+                        <f:param name="page_number" value="#{pageNumber}"/>
+                    </h:commandLink>
+                </ui:repeat>
+            </h:form>
+        </ui:define>
+
     </ui:composition>
+
+<!--    <ui:composition template="/templates/main.xhtml">-->
+<!--        <ui:define name="content">-->
+<!--            &lt;!&ndash;            #{param.genre_id}&ndash;&gt;-->
+<!--            &lt;!&ndash;            https://stackoverflow.com/a/29056931/9586230 &ndash;&gt;-->
+
+
+<!--            &lt;!&ndash;            <p style="width: 100%">&ndash;&gt;-->
+<!--            <h:dataTable value="#{bookList.books}" var="book" cellspacing="10px"-->
+<!--                         columnClasses="book, book, book" styleClass="books">-->
+<!--                <h:column>-->
+<!--                    <h:graphicImage value="/ShowImage?id=#{book.id}" width="120" height="160"/>-->
+<!--                </h:column>-->
+<!--                <h:column>-->
+<!--                    <p><a href="#">#{book.name}</a></p>-->
+<!--                    <p><strong>#{msg['author.name']}: </strong>#{book.author}</p>-->
+<!--                    <p><strong>#{msg['page.count']}: </strong>#{book.pageCount}</p>-->
+<!--                    <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>-->
+<!--                    <p><strong>#{msg['publish.year']}: </strong>#{book.publishYear}</p>-->
+<!--                    <p><strong>#{msg.isbn}: </strong>#{book.isbn}</p>-->
+<!--                </h:column>-->
+<!--                <h:column>-->
+<!--                    &lt;!&ndash;                            <div class="book_info">&ndash;&gt;-->
+<!--                    <p><strong>#{msg.description}</strong></p>-->
+<!--                    <p>#{book.description}</p>-->
+<!--                    &lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--                </h:column>-->
+
+<!--            </h:dataTable>-->
+<!--        </ui:define>-->
+
+<!--    </ui:composition>-->
 
 </h:body>
 </html>
