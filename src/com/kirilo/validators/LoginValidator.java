@@ -30,7 +30,7 @@ public class LoginValidator implements Validator {
                 throw new IllegalArgumentException(bundle.getString("login.first_letter"));
 
             }
-            if (value.length() < 5) {
+            if (value.trim().length() < 5) {
                 throw new IllegalArgumentException(bundle.getString("login.length.error"));
             }
             if (ReservedWords.list.contains(value)) {

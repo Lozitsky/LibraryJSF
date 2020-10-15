@@ -126,6 +126,7 @@ public class BookList implements Serializable {
 
 
     public List<Book> getBookByGenre() {
+        search.imitatSlowLoading();
         search.resetParameters();
         int id = Integer.parseInt(getRequestParameters().get("genre_id"));
         final String sql = String.format("where genre_id=%d", id);

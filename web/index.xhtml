@@ -8,9 +8,23 @@
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <h:outputStylesheet library="css" name="style_index.css"/>
+    <h:outputScript library="js" name="library.js" target="head"/>
     <title>#{msg['head.title']}</title>
 </h:head>
 <h:body>
+<!--    https://bit.ly/2SYp10l -->
+    <noscript>
+        <h4><p>Enable JavaScript in your browther!</p></h4>
+        <style type="text/css">
+            .main {
+                display: none;
+            }
+            p {
+                text-align: center;
+                color: red;
+            }
+        </style>
+    </noscript>
 
     <div class="main">
         <div class="content">
@@ -36,13 +50,14 @@
                 <h:inputText id="username" value="#{user.username}" size="20" required="true"
                              requiredMessage="#{msg['login.required']}">
                     <f:validator validatorId="com.kirilo.validators.LoginValidator"/>
+                    <f:ajax event="keyup" execute="this" render="login_error"/>
                 </h:inputText>
                 <!--                https://qna.habr.com/q/413121 -->
-                <h:commandButton action="/pages/books?faces-redirect=true" value="#{msg['enter.button']}">
+                <h:commandButton action="/pages/books?faces-redirect=true" value="#{msg['enter.button']}" onclick="return checkValue(this.form, `#{msg['login.required']}`);">
                     <f:param name="books" value="#{bookList.allBooks}"/>
                 </h:commandButton>
 
-                <p><h:message for="username" styleClass="error"/></p>
+                <p><h:message id="login_error" for="username" styleClass="error"/></p>
             </h:form>
 
         </div>

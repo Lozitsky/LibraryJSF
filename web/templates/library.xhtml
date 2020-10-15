@@ -9,6 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title><ui:insert name="title"/></title>
     <h:outputStylesheet library="css" name="main.css"/>
+    <h:outputScript library="js" name="library.js" target="head"/>
 </h:head>
 <h:body>
     <div class="body" style="display: flex; flex-flow: column; width: 100%">
@@ -17,13 +18,13 @@
                 <ui:include src="header.xhtml"></ui:include>
             </ui:insert>
         </div>
-<!--        <div id="main">-->
-            <ui:insert name="main">
-                <ui:include src="main.xhtml"></ui:include>
-            </ui:insert>
+        <!--        <div id="main">-->
+        <ui:insert name="main">
+            <ui:include src="main.xhtml"></ui:include>
+        </ui:insert>
 
-            <!--            <div style="clear: both">&nbsp;</div>-->
-<!--        </div>-->
+        <!--            <div style="clear: both">&nbsp;</div>-->
+        <!--        </div>-->
         <div class="footer">
             <ui:insert name="footer">
                 <ui:include src="footer.xhtml"></ui:include>

@@ -21,9 +21,11 @@
                 <ui:repeat value="#{genreList.genres}" var="gl" varStatus="status">
                     <tr>
                         <td>
-                            <h:commandLink action="#{bookList.getBookByGenre}" value="#{gl.name}"
+                            <h:commandLink
+                                           value="#{gl.name}"
                                            styleClass="#{gl.id == search.selectedGenre ? 'selected' : ''}">
                                 <f:param name="genre_id" value="#{gl.id}"/>
+                                <f:ajax onevent="showProgress" event="click" render="@form :letters_form :book_list :count_of_page :count_top :count_down" listener="#{bookList.getBookByGenre}"/>
                             </h:commandLink>
                         </td>
                     </tr>

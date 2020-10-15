@@ -9,6 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <!--    <h:outputStylesheet library="css" name="style_index.css"/>-->
     <h:outputStylesheet library="css" name="main.css"/>
+    <h:outputScript library="js" name="library.js" target="head"/>
     <title>Books facelet</title>
 </h:head>
 <h:body>
@@ -19,14 +20,16 @@
 
         <ui:define name="letters">
             <ui:repeat value="#{letterList.chars}" var="letter" varStatus="metadata">
-                <h:commandLink action="#{bookList.getBooksByLetter}" value="#{letter}"
+                <h:commandLink
+                               value="#{letter}"
                                styleClass="#{letter.toString() == search.selectedChar ? 'selected' : ''}">
                     <f:param name="letter_id" value="#{letter}"/>
+                    <f:ajax onevent="showProgress" event="click" render=":left_menu :letters_form :book_list :count_of_page :count_top :count_down" listener="#{bookList.getBooksByLetter}"/>
                 </h:commandLink>
             </ui:repeat>
         </ui:define>
 
-        <ui:define name="count">
+        <ui:define name="count" >
             <strong>#{msg['book.count']} #{search.totalBooksCount}</strong>
         </ui:define>
 
@@ -36,7 +39,7 @@
 
 
             <!--            <p style="width: 100%">-->
-            <h:dataTable value="#{bookList.books}" var="book" cellspacing="10px"
+            <h:dataTable id="book_list" value="#{bookList.books}" var="book" cellspacing="10px"
                          columnClasses="book, book, book" styleClass="books">
                 <h:column>
                     <h:graphicImage value="/ShowImage?id=#{book.id}" width="120" height="160"/>
@@ -70,9 +73,10 @@
             <h:form styleClass="pager" rendered="#{search.totalBooksCount > search.booksOnPage}">
                 #{msg.pager}
                 <ui:repeat value="#{search.listPageNumbers}" var="pageNumber">
-                    <h:commandLink value="#{pageNumber}" action="#{bookList.selectPage}"
+                    <h:commandLink value="#{pageNumber}"
                                    styleClass="#{pageNumber == search.selectedPage ? 'selected' : ''}">
                         <f:param name="page_number" value="#{pageNumber}"/>
+                        <f:ajax onevent="showProgress" render=":main" event="click" listener="#{bookList.selectPage}"/>
                     </h:commandLink>
                 </ui:repeat>
             </h:form>

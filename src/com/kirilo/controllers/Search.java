@@ -117,4 +117,12 @@ public class Search implements Serializable {
     public String getSelectedChar() {
         return selectedChar;
     }
+
+    public void imitatSlowLoading() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

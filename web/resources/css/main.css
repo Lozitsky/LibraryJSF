@@ -80,17 +80,20 @@ h3 {
 }
 
 .search > .search-logo {
-    flex: 1 6 5%;
+    flex: 1 7 5%;
 }
 
 
 .search > .search-field {
-    flex: 1 6 85%;
+    flex: 5 7 75%;
 }
 
-.search > #search-box {
-    flex: 1 6 20%;
-    min-width: 168px;
+.search > #search-button {
+    flex: 1 7 10%;
+    /*min-width: 168px;*/
+}
+.search > #select-type {
+    flex: 1 7 10%;
 }
 
 .header, .footer {
@@ -185,15 +188,15 @@ h3 {
 .modern-button {
     box-shadow: 6px -1px 0px -6px #1bc2ba;
     background: #45a4c7 linear-gradient(to bottom, #45a4c7 5%, #2ab3bd 100%);
-    border-radius: 7pt;
-    border: 1px solid #197dab;
-    display: inline-block;
+    /*border-radius: 7pt;*/
+    /*border: 1px solid #197dab;*/
+    /*display: inline-block;*/
     cursor: pointer;
     color: #ffffff;
     font-family: Arial, serif;
     font-size: 17px;
     font-weight: bold;
-    padding: 6px 18px;
+    /*padding: 6px 18px;*/
     text-decoration: none;
     text-shadow: 5px 13px 28px #284166;
 }

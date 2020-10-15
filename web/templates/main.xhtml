@@ -12,30 +12,37 @@
     <h:outputStylesheet library="css" name="main.css"/>
 </h:head>
 <h:body>
-    <div id="main">
-        <div class="nav">
+    <h:panelGroup id="main">
+        <h:panelGroup id="left_menu" class="nav">
             <ui:insert name="left_menu">
                 <ui:include src="left_menu.xhtml"></ui:include>
             </ui:insert>
-        </div>
-
+        </h:panelGroup>
+        <!--    https://bit.ly/353hmUa -->
         <div id="book_panel">
             <div id="content">
-                <h:form class="letters">
+                <h:form id="letters_form" class="letters">
                     <ui:insert name="letters"/>
                 </h:form>
-                <p class="item">
-                    <ui:insert name="count"/>
-                </p>
-                <p class="move-right">
-                    <ui:insert name="paginator"/>
-                </p>
+                <h:panelGroup id="count_of_page" class="item">
+                    <p>
+                        <ui:insert name="count"/>
+                    </p>
+                </h:panelGroup>
+
+                <h:panelGroup id="count_top" class="move-right">
+                    <p>
+                        <ui:insert name="paginator"/>
+                    </p>
+                </h:panelGroup>
                 <ui:insert name="content">
                     <ui:include src="content.xhtml"></ui:include>
                 </ui:insert>
-                <ui:insert name="paginator"/>
+                <h:panelGroup id="count_down">
+                    <ui:insert name="paginator"/>
+                </h:panelGroup>
             </div>
         </div>
-    </div>
+    </h:panelGroup>
 </h:body>
 </html>

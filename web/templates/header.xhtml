@@ -9,19 +9,23 @@
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <h:outputStylesheet library="css" name="main.css"/>
+    <h:outputScript library="js" name="library.js" target="head"/>
     <title>Header Title</title>
 </h:head>
 
 <h:body>
     <ui:composition>
         <div class="header">
-
             <div class="item">
                 <h:graphicImage library="images" name="library.png" alt="Logo"/>
             </div>
 
             <div class="item">
                 <h3>#{msg['welcome.title']}</h3>
+            </div>
+
+            <div id="loading_wrapper">
+                <p>#{msg.loading}...</p>
             </div>
 
             <div class="item move-right">
@@ -32,19 +36,24 @@
                     <h:commandLink action="#{loginController.goToIndex}"
                                    value="#{msg['exit']}"/>
                 </h:form>
+
             </div>
         </div>
 
         <h:form id="search" styleClass="search">
             <h:graphicImage styleClass="search-logo" library="images" name="search.jpg" alt="Logo"/>
             <h:inputText id="search-field" styleClass="search-field" value="#{search.searchString}"/>
-            <div id="search-box">
-                <h:commandButton value="#{msg.search}" styleClass="modern-button" action="#{bookList.getBooksByString()}"/>
+            <!--            <div id="search-box">-->
+            <h:commandButton id="search-button" value="#{msg.search}" styleClass="modern-button"
+                             action="#{bookList.getBooksByString()}">
+                <f:ajax onevent="showProgress" execute="@form" event="click" render=":search-field :main :select_type"/>
+            </h:commandButton>
 
-                <h:selectOneMenu value="#{search.searchType}">
-                    <f:selectItems value="#{search.typeMap}"/>
-                </h:selectOneMenu>
-            </div>
+            <h:selectOneMenu id="select_type" value="#{search.searchType}">
+                <f:selectItems value="#{search.typeMap}"/>
+            </h:selectOneMenu>
+
+            <!--            </div>-->
         </h:form>
 
     </ui:composition>
