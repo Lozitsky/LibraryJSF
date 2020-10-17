@@ -32,6 +32,13 @@
                 <div>
                     <strong>#{msg['welcome.info']}, #{user.username}</strong>
                 </div>
+                <h:form>
+                    <h:selectOneMenu value="#{locale.language}" onchange="submit()">
+                        <f:selectItem itemValue="ua" itemLabel="Українська"/>
+                        <f:selectItem itemValue="en" itemLabel="English"/>
+                        <f:selectItem itemValue="ru" itemLabel="Русский"/>
+                    </h:selectOneMenu>
+                </h:form>
                 <h:form class="move-right">
                     <h:commandLink action="#{loginController.goToIndex}"
                                    value="#{msg['exit']}"/>
@@ -49,8 +56,8 @@
                 <f:ajax onevent="showProgress" execute="@form" event="click" render=":search-field :main :select_type"/>
             </h:commandButton>
 
-            <h:selectOneMenu id="select_type" value="#{search.searchType}">
-                <f:selectItems value="#{search.typeMap}"/>
+            <h:selectOneMenu id="select_type" value="#{searchTypeChanger.searchType}">
+                <f:selectItems value="#{searchTypeChanger.typeMap}"/>
             </h:selectOneMenu>
 
             <!--            </div>-->

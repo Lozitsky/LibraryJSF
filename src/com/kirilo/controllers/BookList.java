@@ -29,11 +29,23 @@ public class BookList implements Serializable {
             + "inner join publisher p on b.publisher_id=p.id";
     private static final long serialVersionUID = 1353727775955418805L;
     private final List<Book> books;
+
+    @ManagedProperty(value = "#{searchTypeChanger}")
+    private SearchTypeChanger searchTypeChanger;
+
     @ManagedProperty(value = "#{search}")
     private Search search;
 
     public BookList() {
         books = new ArrayList<>();
+    }
+
+    public SearchTypeChanger getSearchTypeChanger() {
+        return searchTypeChanger;
+    }
+
+    public void setSearchTypeChanger(SearchTypeChanger searchTypeChanger) {
+        this.searchTypeChanger = searchTypeChanger;
     }
 
     public Search getSearch() {
@@ -68,7 +80,7 @@ public class BookList implements Serializable {
                 books.add(book);
             }
         } catch (SQLException throwables) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Can't get books from DB!", throwables);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, String.format("Can't get books from DB!\n%s", query), throwables);
         }
         return books;
     }
@@ -96,9 +108,11 @@ public class BookList implements Serializable {
             }
             query = String.format(
                     "%s limit %d, %d", query, (search.getSelectedPage() - 1) * search.getBooksOnPage(), search.getBooksOnPage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, query + "\n" + search.getSelectedPage());
         } else {
+//            search.resetParameters();
             search.setCurrentSQL(sql);
-            final int count = getBooksCount(String.format("select count(*) from book b %s%s", search.getSearchType() == SearchType.AUTHOR ? "inner join author a on b.author_id=a.id " : "", sql));
+            final int count = getBooksCount(String.format("select count(*) from book b %s%s", searchTypeChanger.getSearchType() == SearchType.AUTHOR ? "inner join author a on b.author_id=a.id " : "", sql));
             search.setTotalBooksCount(count);
 
             int pageCount = count / search.getBooksOnPage() + (count % search.getBooksOnPage() > 0 ? 1 : 0);
@@ -112,21 +126,21 @@ public class BookList implements Serializable {
                 search.setSelectedPage(1);
                 query = String.format(
                         "%s limit %d, %d", query, (search.getSelectedPage() - 1) * search.getBooksOnPage(), search.getBooksOnPage());
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, query+ "\n" + search.getSelectedPage());
             }
         }
         return getBooksFromDB(query);
     }
 
-
     public List<Book> getAllBooks() {
         String sql = "";
 //        final String query = String.format("%s %s order by b.name", SELECT_ALL_FIELDS, sql);
+        search.resetParameters();
         return checkAndGetBooks(sql);
     }
 
-
     public List<Book> getBookByGenre() {
-        search.imitatSlowLoading();
+//        search.imitationSlowLoading();
         search.resetParameters();
         int id = Integer.parseInt(getRequestParameters().get("genre_id"));
         final String sql = String.format("where genre_id=%d", id);
@@ -135,11 +149,9 @@ public class BookList implements Serializable {
         return checkAndGetBooks(sql);
     }
 
-
     private Map<String, String> getRequestParameters() {
         return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
     }
-
 
     public List<Book> getBooksByLetter() {
         search.resetParameters();
@@ -153,7 +165,7 @@ public class BookList implements Serializable {
     public List<Book> getBooksByString() {
         search.resetParameters();
         //    private String currentSQL;
-        String s_type = (search.getSearchType() == SearchType.AUTHOR ? "a.full_name" : "b.name");
+        String s_type = (searchTypeChanger.getSearchType() == SearchType.AUTHOR ? "a.full_name" : "b.name");
         String s_string = search.getSearchString();
         final String sql = String.format("where %s like '%%%s%%'", s_type, s_string);
 //        final String query = String.format("%s %s order by b.name", SELECT_ALL_FIELDS, sql);
@@ -161,7 +173,7 @@ public class BookList implements Serializable {
     }
 
     public void selectPage() {
-        search.resetParameters();
+//        search.resetParameters();
         search.setSelectedPage(Integer.parseInt(getRequestParameters().get("page_number")));
 //        getBooksFromDB(currentSQL);
         checkAndGetBooks(search.getCurrentSQL());

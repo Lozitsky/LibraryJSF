@@ -1,19 +1,17 @@
 package com.kirilo.controllers;
 
-import com.kirilo.enums.SearchType;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @ManagedBean(eager = true)
 @SessionScoped
 public class Search implements Serializable {
     static final long serialVersionUID = -5929977093130714822L;
-    private static Map<String, SearchType> typeMap;
-    private SearchType searchType;
+//    private static Map<String, SearchType> typeMap;
+//    private SearchType searchType;
     private String searchString;
     private int totalBooksCount;
     private int booksOnPage = 2;
@@ -24,17 +22,17 @@ public class Search implements Serializable {
     private String currentSQL;
 
     public void resetParameters() {
-        selectedPage = 0;
+//        selectedPage = 0;
         selectedGenre = 0;
         selectedChar = "";
     }
 
     public Search() {
         listPageNumbers = new ArrayList<>();
-        typeMap = new HashMap<>();
+/*        typeMap = new HashMap<>();
         final ResourceBundle bundle = ResourceBundle.getBundle("com.kirilo.messages", FacesContext.getCurrentInstance().getViewRoot().getLocale());
         typeMap.put(bundle.getString("author.name"), SearchType.AUTHOR);
-        typeMap.put(bundle.getString("book.name"), SearchType.TITLE);
+        typeMap.put(bundle.getString("book.name"), SearchType.TITLE);*/
     }
 
     public String getCurrentSQL() {
@@ -45,7 +43,7 @@ public class Search implements Serializable {
         this.currentSQL = currentSQL;
     }
 
-    public Map<String, SearchType> getTypeMap() {
+/*    public Map<String, SearchType> getTypeMap() {
         return typeMap;
     }
 
@@ -55,7 +53,7 @@ public class Search implements Serializable {
 
     public void setSearchType(SearchType searchType) {
         this.searchType = searchType;
-    }
+    }*/
 
     public String getSearchString() {
         return searchString;
@@ -118,7 +116,7 @@ public class Search implements Serializable {
         return selectedChar;
     }
 
-    public void imitatSlowLoading() {
+    public void imitationSlowLoading() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

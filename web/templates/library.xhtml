@@ -3,34 +3,37 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
       xml:lang="en" lang="en">
-<h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title><ui:insert name="title"/></title>
-    <h:outputStylesheet library="css" name="main.css"/>
-    <h:outputScript library="js" name="library.js" target="head"/>
-</h:head>
-<h:body>
-    <div class="body" style="display: flex; flex-flow: column; width: 100%">
-        <div>
-            <ui:insert name="header">
-                <ui:include src="header.xhtml"></ui:include>
+<f:view locale="#{locale.locale}">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title><ui:insert name="title"/></title>
+        <h:outputStylesheet library="css" name="main.css"/>
+        <h:outputScript library="js" name="library.js" target="head"/>
+    </h:head>
+    <h:body>
+        <div class="body" style="display: flex; flex-flow: column; width: 100%">
+            <div>
+                <ui:insert name="header">
+                    <ui:include src="header.xhtml"></ui:include>
+                </ui:insert>
+            </div>
+            <!--        <div id="main">-->
+            <ui:insert name="main">
+                <ui:include src="main.xhtml"></ui:include>
             </ui:insert>
-        </div>
-        <!--        <div id="main">-->
-        <ui:insert name="main">
-            <ui:include src="main.xhtml"></ui:include>
-        </ui:insert>
 
-        <!--            <div style="clear: both">&nbsp;</div>-->
-        <!--        </div>-->
-        <div class="footer">
-            <ui:insert name="footer">
-                <ui:include src="footer.xhtml"></ui:include>
-            </ui:insert>
-        </div>
+            <!--            <div style="clear: both">&nbsp;</div>-->
+            <!--        </div>-->
+            <div class="footer">
+                <ui:insert name="footer">
+                    <ui:include src="footer.xhtml"></ui:include>
+                </ui:insert>
+            </div>
 
-    </div>
-</h:body>
+        </div>
+    </h:body>
+</f:view>
+
 </html>
