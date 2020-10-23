@@ -7,7 +7,7 @@
       xml:lang="en" lang="en">
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<!--    <h:outputStylesheet library="css" name="style_index.css"/>-->
+    <!--    <h:outputStylesheet library="css" name="style_index.css"/>-->
     <h:outputStylesheet library="css" name="main.css"/>
     <h:outputScript library="js" name="library.js" target="head"/>
     <title>Books facelet</title>
@@ -21,15 +21,17 @@
         <ui:define name="letters">
             <ui:repeat value="#{letterList.chars}" var="letter" varStatus="metadata">
                 <h:commandLink
-                               value="#{letter}"
-                               styleClass="#{letter.toString() == search.selectedChar ? 'selected' : ''}">
+                        value="#{letter}"
+                        styleClass="#{letter.toString() == search.selectedChar ? 'selected' : ''}">
                     <f:param name="letter_id" value="#{letter}"/>
-                    <f:ajax onevent="showProgress" event="click" render=":left_menu :letters_form :book_list :count_of_page :count_top :count_down" listener="#{bookList.getBooksByLetter}"/>
+                    <f:ajax onevent="showProgress" event="click"
+                            render=":left_menu :letters_form :book_list :count_of_page :count_top :count_down"
+                            listener="#{bookList.getBooksByLetter}"/>
                 </h:commandLink>
             </ui:repeat>
         </ui:define>
 
-        <ui:define name="count" >
+        <ui:define name="count">
             <strong>#{msg['book.count']} #{search.totalBooksCount}</strong>
         </ui:define>
 
@@ -51,11 +53,18 @@
                     <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>
                     <p><strong>#{msg['publish.year']}: </strong>#{book.publishYear}</p>
                     <p><strong>#{msg.isbn}: </strong>#{book.isbn}</p>
-<!--                    <p><h:outputLink value="pdf_book.xhtml" target="_blank">read</h:outputLink></p>-->
+                    <!--                    <p><h:outputLink value="pdf_book.xhtml" target="_blank">read</h:outputLink></p>-->
                     <h:form>
-                        <h:commandLink action="pdf_book" target="_blank" value="read">
+                        <h:graphicImage style="width: 2vh" library="images" name="read.jpg"/>
+                        <h:commandLink action="pdf_book" target="_blank" value="#{msg.read}">
                             <f:param name="id" value="#{book.id}"/>
                         </h:commandLink>
+                        <h:graphicImage style="width: 2vh" library="images" name="download.jpg"/>
+                        <h:outputLink styleClass="" action="" value="#{request.contextPath}/filePdf" target="_blank">
+                            <h:outputText value="#{msg.download}"/>
+                            <f:param name="id" value="#{book.id}"/>
+                            <f:param name="filename" value="#{book.name}"/>
+                        </h:outputLink>
                     </h:form>
                 </h:column>
                 <h:column>
@@ -83,38 +92,6 @@
         </ui:define>
 
     </ui:composition>
-
-<!--    <ui:composition template="/templates/main.xhtml">-->
-<!--        <ui:define name="content">-->
-<!--            &lt;!&ndash;            #{param.genre_id}&ndash;&gt;-->
-<!--            &lt;!&ndash;            https://stackoverflow.com/a/29056931/9586230 &ndash;&gt;-->
-
-
-<!--            &lt;!&ndash;            <p style="width: 100%">&ndash;&gt;-->
-<!--            <h:dataTable value="#{bookList.books}" var="book" cellspacing="10px"-->
-<!--                         columnClasses="book, book, book" styleClass="books">-->
-<!--                <h:column>-->
-<!--                    <h:graphicImage value="/ShowImage?id=#{book.id}" width="120" height="160"/>-->
-<!--                </h:column>-->
-<!--                <h:column>-->
-<!--                    <p><a href="#">#{book.name}</a></p>-->
-<!--                    <p><strong>#{msg['author.name']}: </strong>#{book.author}</p>-->
-<!--                    <p><strong>#{msg['page.count']}: </strong>#{book.pageCount}</p>-->
-<!--                    <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>-->
-<!--                    <p><strong>#{msg['publish.year']}: </strong>#{book.publishYear}</p>-->
-<!--                    <p><strong>#{msg.isbn}: </strong>#{book.isbn}</p>-->
-<!--                </h:column>-->
-<!--                <h:column>-->
-<!--                    &lt;!&ndash;                            <div class="book_info">&ndash;&gt;-->
-<!--                    <p><strong>#{msg.description}</strong></p>-->
-<!--                    <p>#{book.description}</p>-->
-<!--                    &lt;!&ndash;                            </div>&ndash;&gt;-->
-<!--                </h:column>-->
-
-<!--            </h:dataTable>-->
-<!--        </ui:define>-->
-
-<!--    </ui:composition>-->
 
 </h:body>
 </html>

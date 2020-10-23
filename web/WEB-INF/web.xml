@@ -26,10 +26,6 @@
         <servlet-name>showImage</servlet-name>
         <servlet-class>com.kirilo.servlets.ShowImage</servlet-class>
     </servlet>
-<!--    <servlet>-->
-<!--        <servlet-name>fileReadPdf</servlet-name>-->
-<!--        <servlet-class>com.kirilo.servlets.FileReadPdf</servlet-class>-->
-<!--    </servlet>-->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
@@ -38,10 +34,6 @@
         <servlet-name>showImage</servlet-name>
         <url-pattern>/ShowImage</url-pattern>
     </servlet-mapping>
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>fileReadPdf</servlet-name>-->
-<!--        <url-pattern>/readPdf</url-pattern>-->
-<!--    </servlet-mapping>-->
 
     <welcome-file-list>
         <welcome-file>/pages/index.xhtml</welcome-file>

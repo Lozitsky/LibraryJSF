@@ -15,21 +15,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 // http://javaonlineguide.net/2015/04/reading-pdf-file-binary-data-stored-in-mysql-database-using-servlet-display-in-browser.html
-@WebServlet(name = "readPdf", urlPatterns = "/readPdf")
-public class FileReadPdf extends HttpServlet {
 
+@WebServlet(name = "saveOrReadPdf", urlPatterns = "/filePdf")
+public class SavePdf extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id") != null ? req.getParameter("id") : "NA";
+    protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        String id = httpServletRequest.getParameter("id") != null ? httpServletRequest.getParameter("id") : "NA";
 
-        resp.setContentType("application/pdf");
-        resp.setHeader("Content-Disposition", "inline; filename=" + id + ".pdf");
+        final String filename = httpServletRequest.getParameter("filename");
+        final String header = filename != null && !filename.isEmpty() ? "attachment; filename=" + filename : "inline; filename=" + id;
+
+        httpServletResponse.setContentType("application/pdf");
+        httpServletResponse.setHeader("Content-Disposition", header + ".pdf");
 
         try (Statement statement = Database.getConnection().createStatement();
              final ResultSet resultSet = statement.executeQuery("select content from book where id=" + id)
         ) {
             while (resultSet.next()) {
-                resp.getOutputStream().write(resultSet.getBytes("content"));
+                httpServletResponse.getOutputStream().write(resultSet.getBytes("content"));
             }
         } catch (SQLException throwables) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Can't load book content from DB id=" + id, throwables);
@@ -37,8 +40,8 @@ public class FileReadPdf extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
+    protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
+        doPost(httpServletRequest, httpServletResponse);
     }
 
     @Override

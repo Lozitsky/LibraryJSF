@@ -59,6 +59,17 @@
 
                 <p><h:message id="login_error" for="username" styleClass="error"/></p>
             </h:form>
+            <h:form styleClass="login_lang_form">
+                    <h:commandLink action="#{locale.setLanguage('ua')}">
+                        <h:graphicImage styleClass="login_lang_item" value="resources/images/svg/ua.svg"/>
+                    </h:commandLink>
+                    <h:commandLink action="#{locale.setLanguage('en')}">
+                        <h:graphicImage styleClass="login_lang_item" value="resources/images/svg/uk.svg"/>
+                    </h:commandLink>
+                    <h:commandLink action="#{locale.setLanguage('ru')}">
+                        <h:graphicImage styleClass="login_lang_item" value="resources/images/svg/ru.svg"/>
+                    </h:commandLink>
+            </h:form>
 
         </div>
         <div class="footer">
