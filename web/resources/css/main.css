@@ -172,6 +172,9 @@ h3 {
     margin: 0;
     list-style: none;
 }
+.admin_mode {
+    width: 100%;
+}
 
 .book {
     text-align: center;

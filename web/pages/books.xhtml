@@ -35,10 +35,25 @@
             <strong>#{msg['book.count']} #{search.totalBooksCount}</strong>
         </ui:define>
 
+        <ui:define name="edit_mode">
+            <h:form>
+            </h:form>
+        </ui:define>
+
+
         <ui:define name="content">
             <!--            #{param.genre_id}-->
             <!--            https://stackoverflow.com/a/29056931/9586230 -->
 
+            <h:commandButton value="Edit" action="#{mode.edit}" rendered="#{not mode.editMode}">
+                <f:ajax execute="@form" onevent="showProgress" render="@form"/>
+            </h:commandButton>
+            <h:commandButton value="Save" action="#{mode.save}" rendered="#{mode.editMode}">
+                <f:ajax execute="@form" onevent="showProgress" render="@form"/>
+            </h:commandButton>
+            <h:commandButton immediate="true" value="Exit" action="#{mode.cancel}" rendered="#{mode.editMode}">
+                <f:ajax execute="@form" onevent="showProgress" render="@form"/>
+            </h:commandButton>
 
             <!--            <p style="width: 100%">-->
             <h:dataTable id="book_list" value="#{bookList.books}" var="book" cellspacing="10px"
@@ -47,34 +62,72 @@
                     <h:graphicImage value="/ShowImage?id=#{book.id}" width="120" height="160"/>
                 </h:column>
                 <h:column>
-                    <p><a href="#">#{book.name}</a></p>
-                    <p><strong>#{msg['author.name']}: </strong>#{book.author}</p>
-                    <p><strong>#{msg['page.count']}: </strong>#{book.pageCount}</p>
-                    <p><strong>#{msg.publisher}: </strong>#{book.publisher}</p>
-                    <p><strong>#{msg['publish.year']}: </strong>#{book.publishYear}</p>
-                    <p><strong>#{msg.isbn}: </strong>#{book.isbn}</p>
+<!--                    <h:form>-->
+                        <h:commandLink action="pdf_book" target="_blank">
+                            <h:outputText value="#{book.name}" rendered="#{not book.edit}"/>
+                            <f:param name="id" value="#{book.id}"/>
+                        </h:commandLink>
+                        <h:inputText value="#{book.name}" rendered="#{mode.editMode and book.edit}"/>
+                        <p>
+                            <strong>#{msg['author.name']}: </strong>
+                            <h:outputText value="#{book.author}" rendered="#{not book.edit}"/>
+                            <h:inputText value="#{book.author}" rendered="#{mode.editMode and book.edit}"/>
+                        </p>
+                        <p>
+                            <strong>#{msg['page.count']}: </strong>
+                            <h:outputText value="#{book.pageCount}" rendered="#{not book.edit}"/>
+                            <h:inputText value="#{book.pageCount}" rendered="#{mode.editMode and book.edit}"/>
+                        </p>
+                        <p>
+                            <strong>#{msg.publisher}: </strong>
+                            <h:outputText value="#{book.publisher}" rendered="#{not book.edit}"/>
+                            <h:inputText value="#{book.publisher}" rendered="#{mode.editMode and book.edit}"/>
+                        </p>
+                        <p>
+                            <strong>#{msg['publish.year']}: </strong>
+                            <h:outputText value="#{book.publishYear}" rendered="#{not book.edit}"/>
+                            <h:inputText value="#{book.publishYear}" rendered="#{mode.editMode and book.edit}"/>
+                        </p>
+                        <p>
+                            <strong>#{msg.isbn}: </strong>
+                            <h:outputText value="#{book.isbn}" rendered="#{not book.edit}"/>
+                            <h:inputText value="#{book.isbn}" rendered="#{mode.editMode and book.edit}"/>
+                        </p>
+<!--                    </h:form>-->
+
                     <!--                    <p><h:outputLink value="pdf_book.xhtml" target="_blank">read</h:outputLink></p>-->
-                    <h:form>
+<!--                    <h:form>-->
                         <h:graphicImage style="width: 2vh" library="images" name="read.jpg"/>
                         <h:commandLink action="pdf_book" target="_blank" value="#{msg.read}">
                             <f:param name="id" value="#{book.id}"/>
                         </h:commandLink>
                         <h:graphicImage style="width: 2vh" library="images" name="download.jpg"/>
-                        <h:outputLink styleClass="" action="" value="#{request.contextPath}/filePdf" target="_blank">
+                        <h:outputLink styleClass="" value="#{request.contextPath}/filePdf" target="_blank">
                             <h:outputText value="#{msg.download}"/>
                             <f:param name="id" value="#{book.id}"/>
                             <f:param name="filename" value="#{book.name}"/>
                         </h:outputLink>
-                    </h:form>
+<!--                    </h:form>-->
                 </h:column>
                 <h:column>
                     <!--                            <div class="book_info">-->
-                    <p><strong>#{msg.description}</strong></p>
-                    <p>#{book.description}</p>
+                    <p>
+                        <strong>#{msg.description}</strong>
+                    </p>
+
+                        <h:outputText value="#{book.description}" rendered="#{not book.edit}"/>
+                        <h:inputTextarea value="#{book.description}" rendered="#{mode.editMode and book.edit}"/>
+
                     <!--                            </div>-->
+                </h:column>
+                <h:column>
+                    <h:selectBooleanCheckbox value="#{book.edit}" rendered="#{mode.editMode}">
+                        <f:ajax execute="@form" onevent="showProgress" event="click" render="@form"/>
+                    </h:selectBooleanCheckbox>
                 </h:column>
 
             </h:dataTable>
+
         </ui:define>
 
 

@@ -35,9 +35,18 @@
                         <ui:insert name="paginator"/>
                     </p>
                 </h:panelGroup>
-                <ui:insert name="content">
-                    <ui:include src="content.xhtml"></ui:include>
-                </ui:insert>
+                <h:panelGroup id="admin_mode" styleClass="admin_mode">
+                    <p>
+                        <ui:insert name="edit_mode"/>
+                    </p>
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:form style="width: 100%" id="edit_m">
+                        <ui:insert name="content">
+                            <ui:include src="content.xhtml"></ui:include>
+                        </ui:insert>
+                    </h:form>
+                </h:panelGroup>
                 <h:panelGroup id="count_down">
                     <ui:insert name="paginator"/>
                 </h:panelGroup>

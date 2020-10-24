@@ -2,7 +2,17 @@ package com.kirilo.beans;
 
 import java.awt.*;
 
+
 public class Book {
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+    }
+
+    private boolean edit;
     private int id;
     private String name;
     private byte[] content;

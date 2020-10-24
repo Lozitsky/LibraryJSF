@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,8 +23,8 @@ public class SavePdf extends HttpServlet {
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         String id = httpServletRequest.getParameter("id") != null ? httpServletRequest.getParameter("id") : "NA";
 
-        final String filename = httpServletRequest.getParameter("filename");
-        final String header = filename != null && !filename.isEmpty() ? "attachment; filename=" + filename : "inline; filename=" + id;
+        String filename = httpServletRequest.getParameter("filename");
+        String header = filename != null && !filename.isEmpty() ? "attachment; filename=" + URLEncoder.encode(filename, "UTF-8") : "inline; filename=" + id;
 
         httpServletResponse.setContentType("application/pdf");
         httpServletResponse.setHeader("Content-Disposition", header + ".pdf");

@@ -4,11 +4,14 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
 import java.util.Locale;
 
 @ManagedBean(name = "locale")
 @SessionScoped
-public class LocalChanger {
+public class LocalChanger implements Serializable {
+    private static final long serialVersionUID = -8755259378751231809L;
+
     private Locale locale;
 
     public LocalChanger() {

@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -110,7 +111,6 @@ public class BookList implements Serializable {
                     "%s limit %d, %d", query, (search.getSelectedPage() - 1) * search.getBooksOnPage(), search.getBooksOnPage());
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, query + "\n" + search.getSelectedPage());
         } else {
-//            search.resetParameters();
             search.setCurrentSQL(sql);
             final int count = getBooksCount(String.format("select count(*) from book b %s%s", searchTypeChanger.getSearchType() == SearchType.AUTHOR ? "inner join author a on b.author_id=a.id " : "", sql));
             search.setTotalBooksCount(count);
@@ -134,18 +134,15 @@ public class BookList implements Serializable {
 
     public List<Book> getAllBooks() {
         String sql = "";
-//        final String query = String.format("%s %s order by b.name", SELECT_ALL_FIELDS, sql);
         search.resetParameters();
         return checkAndGetBooks(sql);
     }
 
     public List<Book> getBookByGenre() {
-//        search.imitationSlowLoading();
         search.resetParameters();
         int id = Integer.parseInt(getRequestParameters().get("genre_id"));
         final String sql = String.format("where genre_id=%d", id);
         search.setSelectedGenre(id);
-//        final String query = String.format("%s %s order by b.name", SELECT_ALL_FIELDS, sql);
         return checkAndGetBooks(sql);
     }
 
@@ -158,25 +155,49 @@ public class BookList implements Serializable {
         String ch = getRequestParameters().get("letter_id").substring(0, 1);
         final String sql = String.format("where b.name like '%s%%'", ch.toLowerCase());
         search.setSelectedChar(ch);
-//        final String query = String.format("%s %s order by b.name", SELECT_ALL_FIELDS, sql);
         return checkAndGetBooks(sql);
     }
 
     public List<Book> getBooksByString() {
         search.resetParameters();
-        //    private String currentSQL;
         String s_type = (searchTypeChanger.getSearchType() == SearchType.AUTHOR ? "a.full_name" : "b.name");
         String s_string = search.getSearchString();
         final String sql = String.format("where %s like '%%%s%%'", s_type, s_string);
-//        final String query = String.format("%s %s order by b.name", SELECT_ALL_FIELDS, sql);
         return checkAndGetBooks(sql);
     }
 
     public void selectPage() {
-//        search.resetParameters();
         search.setSelectedPage(Integer.parseInt(getRequestParameters().get("page_number")));
-//        getBooksFromDB(currentSQL);
         checkAndGetBooks(search.getCurrentSQL());
-//        return "books";
+    }
+
+    public String updateBooks() {
+        try {
+            try (PreparedStatement statement = Database.getConnection().prepareStatement(
+                    "update book set name=?, isbn=?,  page_count=?, publish_year=?, description=? where id=?"
+            )) {
+                for (Book book : books) {
+                    if (!book.isEdit()) {
+                        continue;
+                    }
+                    statement.setString(1, book.getName());
+                    statement.setString(2, book.getIsbn());
+                    statement.setInt(3, book.getPageCount());
+                    statement.setInt(4, book.getPublishYear());
+                    statement.setString(5, book.getDescription());
+                    statement.setInt(6, book.getId());
+                    statement.addBatch();
+                }
+                statement.executeBatch();
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return "books";
+    }
+
+    public void resetMode() {
+        books.forEach(book -> book.setEdit(false));
     }
 }
