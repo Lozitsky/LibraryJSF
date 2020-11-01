@@ -54,7 +54,7 @@
                 </h:inputText>
                 <!--                https://qna.habr.com/q/413121 -->
                 <h:commandButton action="/pages/books?faces-redirect=true" value="#{msg['enter.button']}" onclick="return checkValue(this.form, `#{msg['login.required']}`);">
-                    <f:param name="books" value="#{bookList.allBooks}"/>
+                    <f:param name="books" value="#{allBooks.execute()}"/>
                 </h:commandButton>
 
                 <p><h:message id="login_error" for="username" styleClass="error"/></p>

@@ -54,7 +54,7 @@
             </h:inputText>
             <!--            <div id="search-box">-->
             <h:commandButton id="search-button" value="#{msg.search}" styleClass="modern-button"
-                             action="#{bookList.getBooksByString()}">
+                             action="#{bookByString.execute()}">
                 <f:ajax onevent="showProgress" execute="@form" event="click" render=":search-field :main :select_type"/>
             </h:commandButton>
 

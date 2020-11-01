@@ -21,8 +21,27 @@
     display: flex;
     align-items: center;
 }
+.select_menu {
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
 .selected {
     color: red;
+    padding: 5px 5px 0;
+}
+
+.unselected {
+    color: #284166;
+    padding-top: 0px;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-bottom: 0px;
+}
+
+.link {
+    width: 2vh;
+    padding: 0 5px 0 15px;
 }
 
 #exit_link {
@@ -68,7 +87,7 @@ h3 {
     padding: 5px;
     border-radius: 7pt;
     border: 1px solid #8888bb;
-    background: #ccccff;
+    background: #e2e2f3;
 }
 
 #main > .nav {
@@ -92,6 +111,7 @@ h3 {
     flex: 1 7 10%;
     /*min-width: 168px;*/
 }
+
 .search > #select-type {
     flex: 1 7 10%;
 }
@@ -104,7 +124,7 @@ h3 {
     min-height: 100px;
     border: 1px solid #eebb55;
     border-radius: 7pt;
-    background: #ffeebb;
+    background: #ffe3ba;
 }
 
 #book_panel {
@@ -149,6 +169,71 @@ h3 {
 
 }
 
+.books {
+    width: 100%;
+    /*    display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;*/
+    /*    padding: 0;
+        margin: 0;
+        list-style: none;
+        display: flex;
+        flex-flow: wrap;*/
+    text-align: center;
+    /*flex-flow: row wrap;*/
+    /*flex-flow: row;*/
+    /*justify-content: space-around;*/
+    /*padding: 0;*/
+    /*margin: 0;*/
+    list-style: none;
+}
+
+.books > tbody > tr {
+    width: 100%;
+    border: 1px solid #aab8c6;
+    border-radius: 7pt;
+    padding: 10px 0;
+    margin: 0;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+}
+
+.book1 {
+    flex: 1 6 20%;
+    /*flex-grow: 1;*/
+    text-align: center;
+    align-self: center;
+    margin: 0 auto;
+}
+
+.book2 {
+    flex: 1 6 45%;
+    /*flex-grow: 5;*/
+    /*text-align: left;*/
+    margin: 0 auto;
+}
+
+.book3 {
+    flex: 1 6 30%;
+    /*flex-grow: 1;*/
+    text-align: left;
+    margin: 0 auto;
+}
+
+.book4 {
+    flex: 1 6 5%;
+    margin: 0 auto;
+}
+
+.book2 > .title {
+    text-align: center;
+}
+
+.book2 > .content {
+    text-align: left;
+}
+
 .letters {
     width: 100%;
     display: flex;
@@ -163,27 +248,22 @@ h3 {
     margin: 0 auto;
 }
 
-.books {
+/*.books {
     width: 100%;
-    /*display: flex;
+    !*display: flex;
     flex-flow: row wrap;
-    justify-content: space-around;*/
+    justify-content: space-around;*!
     padding: 0;
     margin: 0;
     list-style: none;
-}
+}*/
 .admin_mode {
     width: 100%;
 }
 
-.book {
-    text-align: center;
-    margin: 0 auto;
-}
 /*.book > p {
     text-align: center;
 }*/
-
 
 
 /* https://www.bestcssbuttongenerator.com/ */
@@ -216,11 +296,12 @@ h3 {
 
 /* https://stackoverflow.com/a/55097779/9586230 */
 @media all and (max-width: 640px) {
-    #main, #page, #content {
+    #main, #page, #content, .books > tbody > tr {
         /*-webkit-flex-flow: column;*/
         flex-direction: column;
         /*height: 100vh;*/
     }
+
     /*    #pdf_book{
         margin: 0;
         flex: 10 1 100%;
@@ -229,6 +310,28 @@ h3 {
     #book_panel > #menu_link {
         flex: 0;
     }
+
+    /*    .book1 {
+            flex: 1 6 40%;
+        }
+        .book2 {
+            flex: 1 6 60%;
+        }*/
+    .book3 {
+        margin: 0;
+    }
+
+    /*    .books > .book3 {
+            flex: 6 6 100%;
+            text-align: left;
+        }
+        .books > .book3 > p {
+
+            text-align: left;
+            !*align-content: flex-start;*!
+            margin: 0 0;
+
+        }*/
 
 
 }

@@ -10,8 +10,7 @@ import java.util.List;
 @SessionScoped
 public class Search implements Serializable {
     static final long serialVersionUID = -5929977093130714822L;
-//    private static Map<String, SearchType> typeMap;
-//    private SearchType searchType;
+
     private String searchString;
     private int totalBooksCount;
     private int booksOnPage = 2;
@@ -21,18 +20,14 @@ public class Search implements Serializable {
     private String selectedChar;
     private String currentSQL;
 
-    public void resetParameters() {
-//        selectedPage = 0;
-        selectedGenre = 0;
-        selectedChar = "";
-    }
-
     public Search() {
         listPageNumbers = new ArrayList<>();
-/*        typeMap = new HashMap<>();
-        final ResourceBundle bundle = ResourceBundle.getBundle("com.kirilo.messages", FacesContext.getCurrentInstance().getViewRoot().getLocale());
-        typeMap.put(bundle.getString("author.name"), SearchType.AUTHOR);
-        typeMap.put(bundle.getString("book.name"), SearchType.TITLE);*/
+    }
+
+    public void resetParameters() {
+        selectedGenre = 0;
+        selectedChar = "";
+        selectedPage = 1;
     }
 
     public String getCurrentSQL() {
@@ -42,18 +37,6 @@ public class Search implements Serializable {
     public void setCurrentSQL(String currentSQL) {
         this.currentSQL = currentSQL;
     }
-
-/*    public Map<String, SearchType> getTypeMap() {
-        return typeMap;
-    }
-
-    public SearchType getSearchType() {
-        return searchType;
-    }
-
-    public void setSearchType(SearchType searchType) {
-        this.searchType = searchType;
-    }*/
 
     public String getSearchString() {
         return searchString;
@@ -87,11 +70,6 @@ public class Search implements Serializable {
         this.listPageNumbers = ListPageNumbers;
     }
 
-/*    public int selectPage() {
-
-        return 1;
-    }*/
-
     public int getSelectedPage() {
         return selectedPage;
     }
@@ -100,20 +78,20 @@ public class Search implements Serializable {
         this.selectedPage = selectedPage;
     }
 
-    public void setSelectedGenre(int id) {
-        this.selectedGenre = id;
-    }
-
     public int getSelectedGenre() {
         return selectedGenre;
     }
 
-    public void setSelectedChar(String ch) {
-        this.selectedChar = ch;
+    public void setSelectedGenre(int id) {
+        this.selectedGenre = id;
     }
 
     public String getSelectedChar() {
         return selectedChar;
+    }
+
+    public void setSelectedChar(String ch) {
+        this.selectedChar = ch;
     }
 
     public void imitationSlowLoading() {
@@ -122,5 +100,10 @@ public class Search implements Serializable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void booksOnPageChanged(int booksOnPage) {
+        this.booksOnPage = booksOnPage;
+        selectedPage = 1;
     }
 }

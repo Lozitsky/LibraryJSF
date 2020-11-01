@@ -7,7 +7,7 @@ import com.kirilo.enums.SearchType;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -103,71 +102,67 @@ public class BookList implements Serializable {
     private List<Book> checkAndGetBooks(String sql) {
         String query = String.format("%s %s order by b.name", SELECT_ALL_FIELDS, sql);
 
-        if (sql.equals(search.getCurrentSQL())) {
-            if (search.getTotalBooksCount() <= search.getSelectedPage()) {
-                return books;
-            }
-            query = String.format(
-                    "%s limit %d, %d", query, (search.getSelectedPage() - 1) * search.getBooksOnPage(), search.getBooksOnPage());
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, query + "\n" + search.getSelectedPage());
-        } else {
-            search.setCurrentSQL(sql);
-            final int count = getBooksCount(String.format("select count(*) from book b %s%s", searchTypeChanger.getSearchType() == SearchType.AUTHOR ? "inner join author a on b.author_id=a.id " : "", sql));
-            search.setTotalBooksCount(count);
+        final int count = getBooksCount(String.format(
+                "select count(*) from book b %s%s",
+                searchTypeChanger.getSearchType() == SearchType.AUTHOR ? "inner join author a on b.author_id=a.id " : "", sql
+        ));
+        int pageCount = count / search.getBooksOnPage() + (count % search.getBooksOnPage() > 0 ? 1 : 0);
 
-            int pageCount = count / search.getBooksOnPage() + (count % search.getBooksOnPage() > 0 ? 1 : 0);
-
-            if (pageCount > 1) {
+        if (pageCount > 1) {
+            if (pageCount != search.getListPageNumbers().size()) {
                 final ArrayList<Integer> list = new ArrayList<>();
                 for (int i = 0; i < pageCount; i++) {
                     list.add(i + 1);
                 }
                 search.setListPageNumbers(list);
-                search.setSelectedPage(1);
-                query = String.format(
-                        "%s limit %d, %d", query, (search.getSelectedPage() - 1) * search.getBooksOnPage(), search.getBooksOnPage());
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, query+ "\n" + search.getSelectedPage());
             }
+            query = String.format(
+                    "%s limit %d, %d",
+                    query, (search.getSelectedPage() - 1) * search.getBooksOnPage(), search.getBooksOnPage()
+            );
         }
+
+        if (sql.equals(search.getCurrentSQL())) {
+            if (search.getTotalBooksCount() <= search.getSelectedPage()) {
+                return books;
+            }
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "sql == search.getCurrentSQL()" + query + "\n" + search.getSelectedPage());
+        } else {
+            search.setCurrentSQL(sql);
+            search.setTotalBooksCount(count);
+            search.setSelectedPage(1);
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "pagecount == " + pageCount + "\n" + query + "\n" + search.getSelectedPage());
+        }
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Count of pages: " + search.getListPageNumbers());
         return getBooksFromDB(query);
     }
 
     public List<Book> getAllBooks() {
         String sql = "";
-        search.resetParameters();
         return checkAndGetBooks(sql);
     }
 
-    public List<Book> getBookByGenre() {
-        search.resetParameters();
-        int id = Integer.parseInt(getRequestParameters().get("genre_id"));
+    public List<Book> getBookByGenre(int id) {
         final String sql = String.format("where genre_id=%d", id);
-        search.setSelectedGenre(id);
         return checkAndGetBooks(sql);
     }
 
-    private Map<String, String> getRequestParameters() {
-        return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-    }
-
-    public List<Book> getBooksByLetter() {
-        search.resetParameters();
-        String ch = getRequestParameters().get("letter_id").substring(0, 1);
+    public List<Book> getBooksByLetter(String ch) {
         final String sql = String.format("where b.name like '%s%%'", ch.toLowerCase());
-        search.setSelectedChar(ch);
         return checkAndGetBooks(sql);
     }
 
-    public List<Book> getBooksByString() {
-        search.resetParameters();
-        String s_type = (searchTypeChanger.getSearchType() == SearchType.AUTHOR ? "a.full_name" : "b.name");
-        String s_string = search.getSearchString();
+    public List<Book> getBooksByString(String s_type, String s_string) {
         final String sql = String.format("where %s like '%%%s%%'", s_type, s_string);
         return checkAndGetBooks(sql);
     }
 
-    public void selectPage() {
-        search.setSelectedPage(Integer.parseInt(getRequestParameters().get("page_number")));
+    public List<Book> selectPage() {
+        return checkAndGetBooks(search.getCurrentSQL());
+    }
+
+    public void booksOnPageChanged(ValueChangeEvent valueChangeEvent) {
+        search.booksOnPageChanged(Integer.parseInt(valueChangeEvent.getNewValue().toString()));
         checkAndGetBooks(search.getCurrentSQL());
     }
 

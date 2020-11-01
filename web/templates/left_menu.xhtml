@@ -25,7 +25,7 @@
                                            value="#{gl.name}"
                                            styleClass="#{gl.id == search.selectedGenre ? 'selected' : ''}">
                                 <f:param name="genre_id" value="#{gl.id}"/>
-                                <f:ajax onevent="showProgress" event="click" render="@form :letters_form :edit_m:book_list :count_of_page :count_top :count_down" listener="#{bookList.getBookByGenre}"/>
+                                <f:ajax onevent="showProgress" event="click" render="@form :letters_form :edit_m:book_list :count_of_page :count_top :count_down" listener="#{booksByGenre.execute}"/>
                             </h:commandLink>
                         </td>
                     </tr>
