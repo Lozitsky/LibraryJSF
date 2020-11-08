@@ -27,10 +27,32 @@
     <navigation-rule>
         <from-view-id>/pages/books.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{loginController.goToIndex}</from-action>
+<!--            <from-action>#{loginController.goToIndex}</from-action>-->
             <from-outcome>index</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
+            <to-view-id>/pages/index.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>books</from-outcome>
+            <to-view-id>/pages/books.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/pages/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>books</from-outcome>
+            <to-view-id>/pages/books.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/pages/pdf_book.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>books</from-outcome>
+            <to-view-id>/pages/books.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>

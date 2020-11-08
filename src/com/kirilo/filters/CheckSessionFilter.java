@@ -1,7 +1,6 @@
 package com.kirilo.filters;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -9,7 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
 
-@WebFilter(filterName = "CheckSessionFilter", urlPatterns = "/pages/*")
+//@WebFilter(filterName = "CheckSessionFilter", urlPatterns = "/pages/*")
 public class CheckSessionFilter implements Filter {
     private static final boolean debug = false;
     // The filter configuration object we are associated with.  If

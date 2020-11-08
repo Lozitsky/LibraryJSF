@@ -10,7 +10,8 @@ body {
 .main {
     background-color: #fff;
     width: 1000px;
-    height: 550px;
+    /*height: 550px;*/
+    height: auto;
     margin: 0 auto;
     padding: 20px;
 }

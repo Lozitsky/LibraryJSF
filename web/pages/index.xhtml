@@ -12,13 +12,14 @@
     <title>#{msg['head.title']}</title>
 </h:head>
 <h:body>
-<!--    https://bit.ly/2SYp10l -->
+    <!--    https://bit.ly/2SYp10l -->
     <noscript>
         <h4><p>Enable JavaScript in your browther!</p></h4>
         <style type="text/css">
             .main {
                 display: none;
             }
+
             p {
                 text-align: center;
                 color: red;
@@ -46,29 +47,46 @@
         <div class="login_div">
             <p class="title">#{msg['input.info']} </p>
             <h:form styleClass="login_form" enctype="charset=UTF-8">
-                <h:outputLabel value="#{msg['input.name']}" for="username"/>
-                <h:inputText id="username" value="#{user.username}" size="20" required="true"
-                             requiredMessage="#{msg['login.required']}">
-                    <f:validator validatorId="com.kirilo.validators.LoginValidator"/>
-                    <f:ajax event="keyup" execute="this" render="login_error"/>
-                </h:inputText>
+                <div>
+                    <h:outputLabel value="#{msg['input.name']}" for="username"/>
+                    <h:inputText id="username" value="#{user.username}" size="20" required="true"
+                                 requiredMessage="#{msg['login.required']}">
+                        <f:validator validatorId="com.kirilo.validators.LoginValidator"/>
+                        <f:ajax event="keyup" execute="this" render="login_error"/>
+                    </h:inputText>
+                </div>
+                <div>
+                    <h:outputLabel value="#{msg['input.password']}" for="password"/>
+                    <h:inputSecret id="password" value="#{user.password}" required="true"
+                                   requiredMessage="#{msg['password.required']}">
+<!--                        <f:validator validatorId="com.kirilo.validators.LoginValidator"/>-->
+                        <f:ajax event="keyup" execute="this" render="login_error"/>
+                    </h:inputSecret>
+                </div>
+
                 <!--                https://qna.habr.com/q/413121 -->
-                <h:commandButton action="/pages/books?faces-redirect=true" value="#{msg['enter.button']}" onclick="return checkValue(this.form, `#{msg['login.required']}`);">
-                    <f:param name="books" value="#{allBooks.execute()}"/>
+<!--                action="/pages/books?faces-redirect=true"-->
+<!--                <input type="hidden" name="from" value="#{requestScope['javax.servlet.forward.request_uri']}" />-->
+                <h:commandButton action="#{user.login}" value="#{msg['enter.button']}"
+                                 onclick="return checkValue(this.form, `#{msg['login.required']}`);">
+                    <!--                    <f:param name="books" value="#{allBooks.execute()}"/>-->
+<!--                    https://stackoverflow.com/a/8024427/9586230 -->
+                    <f:param name="redirect" value="#{requestScope['javax.servlet.forward.request_uri']}" />
+                    <f:ajax execute="@form"/>
                 </h:commandButton>
 
                 <p><h:message id="login_error" for="username" styleClass="error"/></p>
             </h:form>
             <h:form styleClass="login_lang_form">
-                    <h:commandLink action="#{locale.setLanguage('ua')}">
-                        <h:graphicImage styleClass="login_lang_item" value="resources/images/svg/ua.svg"/>
-                    </h:commandLink>
-                    <h:commandLink action="#{locale.setLanguage('en')}">
-                        <h:graphicImage styleClass="login_lang_item" value="resources/images/svg/uk.svg"/>
-                    </h:commandLink>
-                    <h:commandLink action="#{locale.setLanguage('ru')}">
-                        <h:graphicImage styleClass="login_lang_item" value="resources/images/svg/ru.svg"/>
-                    </h:commandLink>
+                <h:commandLink action="#{locale.setLanguage('ua')}">
+                    <h:graphicImage styleClass="login_lang_item" library="images" name="/svg/ua.svg"/>
+                </h:commandLink>
+                <h:commandLink action="#{locale.setLanguage('en')}">
+                    <h:graphicImage styleClass="login_lang_item" library="images" name="svg/uk.svg"/>
+                </h:commandLink>
+                <h:commandLink action="#{locale.setLanguage('ru')}">
+                    <h:graphicImage styleClass="login_lang_item" library="images" name="svg/ru.svg"/>
+                </h:commandLink>
             </h:form>
 
         </div>
