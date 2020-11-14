@@ -51,7 +51,7 @@ public class User implements Serializable {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Can't login!", e);
             final FacesMessage facesMessage = new FacesMessage("#{msg['login.incorrect']}");
             facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-            context.addMessage("login_form",facesMessage);
+            context.addMessage("login_fields",facesMessage);
         }
         return "index?faces-redirect=true";
     }

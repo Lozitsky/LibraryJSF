@@ -44,7 +44,7 @@
         <ui:define name="content">
             <!--            https://stackoverflow.com/a/29056931/9586230 -->
 
-            <h:commandButton value="Edit" action="#{mode.edit}" rendered="#{not mode.editMode}">
+            <h:commandButton value="Edit" action="#{mode.edit}" rendered="#{request.isUserInRole('admin') and not mode.editMode}">
                 <f:ajax execute="@form" onevent="showProgress" render="@form"/>
             </h:commandButton>
             <h:commandButton value="Save" action="#{mode.save}" rendered="#{mode.editMode}">

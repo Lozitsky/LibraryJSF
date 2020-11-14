@@ -55,8 +55,8 @@
         </web-resource-collection>
         <auth-constraint>
             <description/>
-            <role-name>ADMIN</role-name>
-            <role-name>USER</role-name>
+            <role-name>admin</role-name>
+            <role-name>user</role-name>
         </auth-constraint>
         <user-data-constraint>
             <description/>
@@ -73,11 +73,11 @@
 
     <security-role>
         <description/>
-        <role-name>USER</role-name>
+        <role-name>user</role-name>
     </security-role>
     <security-role>
         <description/>
-        <role-name>ADMIN</role-name>
+        <role-name>admin</role-name>
     </security-role>
 
 </web-app>
