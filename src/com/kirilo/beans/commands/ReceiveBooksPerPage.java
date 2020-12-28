@@ -12,6 +12,6 @@ public class ReceiveBooksPerPage extends BaseCommand {
     @Override
     public List<Book> execute() {
         search.setSelectedPage(Integer.parseInt(getRequestParameters().get("page_number")));
-        return bookList.selectPage();
+        return bookList.getBooksFromSelectedPage();
     }
 }

@@ -18,7 +18,7 @@ public class Search implements Serializable {
     private int selectedPage = 1;
     private int selectedGenre = 0;
     private String selectedChar;
-    private String currentSQL;
+//    private String currentSQL;
 
     public Search() {
         listPageNumbers = new ArrayList<>();
@@ -30,13 +30,13 @@ public class Search implements Serializable {
         selectedPage = 1;
     }
 
-    public String getCurrentSQL() {
+/*    public String getCurrentSQL() {
         return currentSQL;
-    }
+    }*/
 
-    public void setCurrentSQL(String currentSQL) {
-        this.currentSQL = currentSQL;
-    }
+//    public void setCurrentSQL(String currentSQL) {
+//        this.currentSQL = currentSQL;
+//    }
 
     public String getSearchString() {
         return searchString;

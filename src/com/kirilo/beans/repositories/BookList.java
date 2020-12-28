@@ -1,13 +1,14 @@
-package com.kirilo.controllers;
+package com.kirilo.beans.repositories;
 
 import com.kirilo.beans.Book;
+import com.kirilo.controllers.Search;
+import com.kirilo.controllers.SearchTypeChanger;
 import com.kirilo.db.Database;
 import com.kirilo.enums.SearchType;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,10 +19,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// https://myfaces.apache.org/wiki/core/user-guide/jsf-and-myfaces-howtos/backend/accessing-one-managed-bean-from-another.html
-@ManagedBean(eager = true)
+@ManagedBean(name = "bookList", eager = true)
 @SessionScoped
-public class BookList implements Serializable {
+public class BookList implements Serializable, BookRepository {
     public static final String SELECT_ALL_FIELDS = "select b.id, b.name, b.page_count, b.isbn, b.publish_year, b.description, "
             + "g.name as genre, a.full_name as author, p.name as publisher from book b "
             + "inner join genre g on b.genre_id=g.id "
@@ -29,6 +29,7 @@ public class BookList implements Serializable {
             + "inner join publisher p on b.publisher_id=p.id";
     private static final long serialVersionUID = 1353727775955418805L;
     private final List<Book> books;
+    private String currentSQL;
 
     @ManagedProperty(value = "#{searchTypeChanger}")
     private SearchTypeChanger searchTypeChanger;
@@ -56,7 +57,7 @@ public class BookList implements Serializable {
         this.search = search;
     }
 
-    public List<Book> getBooks() {
+    public List<Book> getCurrentBooks() {
         return books;
     }
 
@@ -85,7 +86,7 @@ public class BookList implements Serializable {
         return books;
     }
 
-    public int getBooksCount(String query) {
+    private int getBooksCount(String query) {
         try (
                 Statement statement = (Database.getConnection()).createStatement();
                 ResultSet resultSet = statement.executeQuery(query)
@@ -122,13 +123,13 @@ public class BookList implements Serializable {
             );
         }
 
-        if (sql.equals(search.getCurrentSQL())) {
+        if (sql.equals(currentSQL)) {
             if (search.getTotalBooksCount() <= search.getSelectedPage()) {
                 return books;
             }
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "sql == search.getCurrentSQL()" + query + "\n" + search.getSelectedPage());
         } else {
-            search.setCurrentSQL(sql);
+            currentSQL = sql;
             search.setTotalBooksCount(count);
             search.setSelectedPage(1);
             Logger.getLogger(this.getClass().getName()).log(Level.INFO, "pagecount == " + pageCount + "\n" + query + "\n" + search.getSelectedPage());
@@ -157,16 +158,16 @@ public class BookList implements Serializable {
         return checkAndGetBooks(sql);
     }
 
-    public List<Book> selectPage() {
-        return checkAndGetBooks(search.getCurrentSQL());
+    public List<Book> getBooksFromSelectedPage() {
+        return checkAndGetBooks(currentSQL);
     }
 
-    public void booksOnPageChanged(ValueChangeEvent valueChangeEvent) {
-        search.booksOnPageChanged(Integer.parseInt(valueChangeEvent.getNewValue().toString()));
-        checkAndGetBooks(search.getCurrentSQL());
+    public void setNumberOfBooksPerPage(int number) {
+        search.booksOnPageChanged(number);
+        checkAndGetBooks(currentSQL);
     }
 
-    public String updateBooks() {
+    public void updateBooks() {
         try {
             try (PreparedStatement statement = Database.getConnection().prepareStatement(
                     "update book set name=?, isbn=?,  page_count=?, publish_year=?, description=? where id=?"
@@ -189,10 +190,10 @@ public class BookList implements Serializable {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return "books";
+//        return "books";
     }
 
-    public void resetMode() {
+/*    public void resetMode() {
         books.forEach(book -> book.setEdit(false));
-    }
+    }*/
 }

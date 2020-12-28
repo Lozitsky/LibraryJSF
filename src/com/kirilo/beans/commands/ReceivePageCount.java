@@ -12,6 +12,6 @@ public class ReceivePageCount extends BaseCommand {
     @Override
     public List<Book> execute() {
         search.setSelectedPage(1);
-        return bookList.selectPage();
+        return bookList.getBooksFromSelectedPage();
     }
 }

@@ -54,7 +54,7 @@
                 <f:ajax execute="@form" onevent="showProgress" render="@form"/>
             </h:commandButton>
 
-            <h:dataTable id="book_list" value="#{bookList.books}" var="book" cellspacing="10px"
+            <h:dataTable id="book_list" value="#{bookController.getCurrentBooks()}" var="book" cellspacing="10px"
                          columnClasses="book1, book2, book3, book4" styleClass="books">
                 <h:column>
                     <h:graphicImage value="/ShowImage?id=#{book.id}" width="120" height="160"/>
@@ -129,8 +129,8 @@
         </ui:define>
 
         <ui:define name="paginator">
-            <h:form styleClass="pager">
-                <h:selectOneMenu value="#{search.booksOnPage}" valueChangeListener="#{bookList.booksOnPageChanged}">
+            <h:form styleClass="pager" rendered="false">
+                <h:selectOneMenu value="#{search.booksOnPage}" valueChangeListener="#{bookController.ChangeNumberOfBooksPerPage}">
                     <f:selectItem itemValue="2"/>
                     <f:selectItem itemValue="5"/>
                     <f:selectItem itemValue="10"/>
