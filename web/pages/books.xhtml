@@ -71,8 +71,8 @@
                     <h:panelGroup styleClass="content">
                         <p>
                             <strong>#{msg['author.name']}: </strong>
-                            <h:outputText value="#{book.author}" rendered="#{not book.edit}"/>
-                            <h:inputText value="#{book.author}" rendered="#{mode.editMode and book.edit}"/>
+                            <h:outputText value="#{book.author.fullName}" rendered="#{not book.edit}"/>
+                            <h:inputText value="#{book.author.fullName}" rendered="#{mode.editMode and book.edit}"/>
                         </p>
                         <p>
                             <strong>#{msg['page.count']}: </strong>
@@ -81,8 +81,8 @@
                         </p>
                         <p>
                             <strong>#{msg.publisher}: </strong>
-                            <h:outputText value="#{book.publisher}" rendered="#{not book.edit}"/>
-                            <h:inputText value="#{book.publisher}" rendered="#{mode.editMode and book.edit}"/>
+                            <h:outputText value="#{book.publisher.name}" rendered="#{not book.edit}"/>
+                            <h:inputText value="#{book.publisher.name}" rendered="#{mode.editMode and book.edit}"/>
                         </p>
                         <p>
                             <strong>#{msg['publish.year']}: </strong>
@@ -130,7 +130,7 @@
 
         <ui:define name="paginator">
             <h:form styleClass="pager" rendered="false">
-                <h:selectOneMenu value="#{search.booksOnPage}" valueChangeListener="#{bookController.ChangeNumberOfBooksPerPage}">
+                <h:selectOneMenu value="#{search.booksOnPage}" valueChangeListener="#{bookController.changeNumberOfBooksPerPage}">
                     <f:selectItem itemValue="2"/>
                     <f:selectItem itemValue="5"/>
                     <f:selectItem itemValue="10"/>

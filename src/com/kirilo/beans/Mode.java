@@ -35,12 +35,12 @@ public class Mode implements Serializable {
 
     public void save() {
         bookList.updateBooks();
-        bookList.resetMode();
+        bookList.resetModeForAllBooks();
         editMode = false;
     }
 
     public void cancel() {
-        bookList.resetMode();
+        bookList.resetModeForAllBooks();
         editMode = false;
     }
 

@@ -1,6 +1,6 @@
 package com.kirilo.beans.commands;
 
-import com.kirilo.beans.repositories.BookRepository;
+import com.kirilo.controllers.BookController;
 import com.kirilo.controllers.Search;
 
 import javax.faces.bean.ManagedProperty;
@@ -11,8 +11,8 @@ import java.util.Map;
 public abstract class BaseCommand implements Command, Serializable {
     private static final long serialVersionUID = 6183959340404573695L;
 
-    @ManagedProperty(value = "#{bookList}")
-    protected BookRepository bookList;
+    @ManagedProperty(value = "#{bookController}")
+    protected BookController bookList;
 
     public Search getSearch() {
         return search;
@@ -30,11 +30,11 @@ public abstract class BaseCommand implements Command, Serializable {
     public BaseCommand() {
     }
 
-    public BookRepository getBookList() {
+    public BookController getBookList() {
         return bookList;
     }
 
-    public void setBookList(BookRepository bookList) {
+    public void setBookList(BookController bookList) {
         this.bookList = bookList;
     }
 

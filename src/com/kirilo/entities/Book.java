@@ -4,44 +4,83 @@ import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
 
+// https://ci.apache.org/projects/openjpa/2.2.x/docbook/jpa_overview_meta_field.html/
+// https://www.baeldung.com/jpa-basic-annotation#why-use
+
 @Entity
+@Access(AccessType.FIELD)
 public class Book {
-    private boolean edit;
-    private long id;
+    @Id
+    @Column(name = "id")
+    private Long id;
+    @Basic
+    @Column(name = "name")
     private String name;
+    @Basic(optional = false, fetch = FetchType.LAZY)
+    @Column(name = "content")
     private byte[] content;
-    private int pageCount;
+    @Basic
+    @Column(name = "page_count")
+    private Integer pageCount;
+    @Basic
+    @Column(name = "isbn")
     private String isbn;
-    private long genreId;
-    private long authorId;
-    private int publishYear;
-    private long publisherId;
+    @Basic
+    @Column(name = "publish_year")
+    private Integer publishYear;
+    @Basic(optional = false, fetch = FetchType.LAZY)
+    @Column(name = "image")
     private byte[] image;
+    @Basic
+    @Column(name = "description")
     private String description;
+    @Basic
+    @Column(name = "rating")
     private Integer rating;
+    @Transient
     private Long voteCount;
 
     @Transient
-    public boolean isEdit() {
-        return edit;
-    }
-    @Transient
-    public void setEdit(boolean edit) {
-        this.edit = edit;
+    private boolean edit;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Author author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Publisher publisher;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Genre genre;
+
+    public Author getAuthor() {
+        return author;
     }
 
-    @Id
-    @Column(name = "id")
-    public long getId() {
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -50,8 +89,6 @@ public class Book {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "content")
     public byte[] getContent() {
         return content;
     }
@@ -60,18 +97,14 @@ public class Book {
         this.content = content;
     }
 
-    @Basic
-    @Column(name = "page_count")
-    public int getPageCount() {
+    public Integer getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(int pageCount) {
+    public void setPageCount(Integer pageCount) {
         this.pageCount = pageCount;
     }
 
-    @Basic
-    @Column(name = "isbn")
     public String getIsbn() {
         return isbn;
     }
@@ -80,48 +113,14 @@ public class Book {
         this.isbn = isbn;
     }
 
-    @Basic
-    @Column(name = "genre_id")
-    public long getGenreId() {
-        return genreId;
-    }
-
-    public void setGenreId(long genreId) {
-        this.genreId = genreId;
-    }
-
-    @Basic
-    @Column(name = "author_id")
-    public long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
-    }
-
-    @Basic
-    @Column(name = "publish_year")
-    public int getPublishYear() {
+    public Integer getPublishYear() {
         return publishYear;
     }
 
-    public void setPublishYear(int publishYear) {
+    public void setPublishYear(Integer publishYear) {
         this.publishYear = publishYear;
     }
 
-    @Basic
-    @Column(name = "publisher_id")
-    public long getPublisherId() {
-        return publisherId;
-    }
-
-    public void setPublisherId(long publisherId) {
-        this.publisherId = publisherId;
-    }
-
-    @Basic
-    @Column(name = "image")
     public byte[] getImage() {
         return image;
     }
@@ -130,8 +129,6 @@ public class Book {
         this.image = image;
     }
 
-    @Basic
-    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -140,8 +137,6 @@ public class Book {
         this.description = description;
     }
 
-    @Basic
-    @Column(name = "rating")
     public Integer getRating() {
         return rating;
     }
@@ -152,6 +147,7 @@ public class Book {
 
     @Basic
     @Column(name = "vote_count")
+    @Access(AccessType.PROPERTY)
     public Long getVoteCount() {
         return voteCount;
     }
@@ -165,26 +161,22 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return id == book.id &&
-                pageCount == book.pageCount &&
-                genreId == book.genreId &&
-                authorId == book.authorId &&
-                publishYear == book.publishYear &&
-                publisherId == book.publisherId &&
-                Objects.equals(name, book.name) &&
-                Arrays.equals(content, book.content) &&
-                Objects.equals(isbn, book.isbn) &&
-                Arrays.equals(image, book.image) &&
-                Objects.equals(description, book.description) &&
-                Objects.equals(rating, book.rating) &&
-                Objects.equals(voteCount, book.voteCount);
+        return Objects.equals(id, book.id) && Objects.equals(name, book.name) && Arrays.equals(content, book.content) && Objects.equals(pageCount, book.pageCount) && Objects.equals(isbn, book.isbn) && Objects.equals(publishYear, book.publishYear) && Arrays.equals(image, book.image) && Objects.equals(description, book.description) && Objects.equals(rating, book.rating) && Objects.equals(voteCount, book.voteCount);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, name, pageCount, isbn, genreId, authorId, publishYear, publisherId, description, rating, voteCount);
+        int result = Objects.hash(id, name, pageCount, isbn, publishYear, description, rating, voteCount);
         result = 31 * result + Arrays.hashCode(content);
         result = 31 * result + Arrays.hashCode(image);
         return result;
+    }
+
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
     }
 }

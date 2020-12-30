@@ -1,6 +1,6 @@
 package com.kirilo.beans.commands;
 
-import com.kirilo.beans.Book;
+import com.kirilo.entities.Book;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;

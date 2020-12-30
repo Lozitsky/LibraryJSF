@@ -1,30 +1,41 @@
 package com.kirilo.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Access(AccessType.FIELD)
 public class Author {
-    private long id;
-    private String fullName;
-    private Date birthday;
-
     @Id
     @Column(name = "id")
-    public long getId() {
+    private Long id;
+    @Basic
+    @Column(name = "full_name")
+    private String fullName;
+    @Basic
+    @Column(name = "birthday")
+    private Date birthday;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Book> books;
+
+    public List<Book> getBook() {
+        return books;
+    }
+
+    public void setBook(List<Book> books) {
+        this.books = books;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "full_name")
     public String getFullName() {
         return fullName;
     }
@@ -33,8 +44,6 @@ public class Author {
         this.fullName = fullName;
     }
 
-    @Basic
-    @Column(name = "birthday")
     public Date getBirthday() {
         return birthday;
     }
@@ -48,9 +57,7 @@ public class Author {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Author author = (Author) o;
-        return id == author.id &&
-                Objects.equals(fullName, author.fullName) &&
-                Objects.equals(birthday, author.birthday);
+        return Objects.equals(id, author.id) && Objects.equals(fullName, author.fullName) && Objects.equals(birthday, author.birthday);
     }
 
     @Override

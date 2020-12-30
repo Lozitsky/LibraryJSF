@@ -1,6 +1,6 @@
 package com.kirilo.beans.commands;
 
-import com.kirilo.beans.Book;
+import com.kirilo.entities.Book;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -14,6 +14,6 @@ public class ReceiveBooksByGenre extends BaseCommand {
         int id = Integer.parseInt(getRequestParameters().get("genre_id"));
         search.resetParameters();
         search.setSelectedGenre(id);
-        return bookList.getBookByGenre(id);
+        return bookList.getBooksByGenre(id);
     }
 }

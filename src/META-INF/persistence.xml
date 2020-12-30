@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+  <persistence-unit name="Book">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <!--    <non-jta-data-source>LibraryJSF</non-jta-data-source>-->
+    <class>com.kirilo.entities.Author</class>
+    <class>com.kirilo.entities.Book</class>
+    <class>com.kirilo.entities.Genre</class>
+    <class>com.kirilo.entities.Publisher</class>
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ebook_library?useSSL=false&amp;autoReconnect=true"/>
+      <!--      &amp;sessionVariables=wait_timeout=600-->
+      <property name="javax.persistence.jdbc.user" value="admin_db"/>
+      <property name="javax.persistence.jdbc.password" value="password"/>
+
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+      <property name="hibernate.show_sql" value="true" />
+    </properties>
+  </persistence-unit>
+</persistence>

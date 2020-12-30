@@ -1,9 +1,12 @@
 package com.kirilo.beans.repositories;
 
-import com.kirilo.beans.Book;
 import com.kirilo.controllers.Search;
 import com.kirilo.controllers.SearchTypeChanger;
 import com.kirilo.db.Database;
+import com.kirilo.entities.Author;
+import com.kirilo.entities.Book;
+import com.kirilo.entities.Genre;
+import com.kirilo.entities.Publisher;
 import com.kirilo.enums.SearchType;
 
 import javax.faces.bean.ManagedBean;
@@ -19,8 +22,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@ManagedBean(name = "bookList", eager = true)
-@SessionScoped
+/*@ManagedBean(name = "bookList", eager = false)
+@SessionScoped*/
 public class BookList implements Serializable, BookRepository {
     public static final String SELECT_ALL_FIELDS = "select b.id, b.name, b.page_count, b.isbn, b.publish_year, b.description, "
             + "g.name as genre, a.full_name as author, p.name as publisher from book b "
@@ -69,14 +72,20 @@ public class BookList implements Serializable, BookRepository {
         ) {
             while (resultSet.next()) {
                 final Book book = new Book();
-                book.setId(resultSet.getInt("id"));
+                book.setId(resultSet.getLong("id"));
                 book.setName(resultSet.getString("name"));
                 book.setPageCount(resultSet.getInt("page_count"));
                 book.setIsbn(resultSet.getString("isbn"));
-                book.setGenre(resultSet.getString("genre"));
-                book.setAuthor(resultSet.getString("author"));
+                final Genre genre = new Genre();
+                genre.setName(resultSet.getString("genre"));
+                book.setGenre(genre);
+                final Author author = new Author();
+                author.setFullName(resultSet.getString("author"));
+                book.setAuthor(author);
                 book.setPublishYear(resultSet.getInt("publish_year"));
-                book.setPublisher(resultSet.getString("publisher"));
+                final Publisher publisher = new Publisher();
+                publisher.setName(resultSet.getString("publisher"));
+                book.setPublisher(publisher);
                 book.setDescription(resultSet.getString("description"));
                 books.add(book);
             }
@@ -143,7 +152,7 @@ public class BookList implements Serializable, BookRepository {
         return checkAndGetBooks(sql);
     }
 
-    public List<Book> getBookByGenre(int id) {
+    public List<Book> getBooksByGenre(int id) {
         final String sql = String.format("where genre_id=%d", id);
         return checkAndGetBooks(sql);
     }
@@ -153,7 +162,10 @@ public class BookList implements Serializable, BookRepository {
         return checkAndGetBooks(sql);
     }
 
-    public List<Book> getBooksByString(String s_type, String s_string) {
+    public List<Book> getBooksByString(SearchType searchType, String s_string) {
+//        final SearchType searchType = searchTypeChanger.getSearchType();
+        String s_type = (searchType == SearchType.AUTHOR ? "a.full_name" : "b.name");
+
         final String sql = String.format("where %s like '%%%s%%'", s_type, s_string);
         return checkAndGetBooks(sql);
     }
@@ -181,7 +193,7 @@ public class BookList implements Serializable, BookRepository {
                     statement.setInt(3, book.getPageCount());
                     statement.setInt(4, book.getPublishYear());
                     statement.setString(5, book.getDescription());
-                    statement.setInt(6, book.getId());
+                    statement.setLong(6, book.getId());
                     statement.addBatch();
                 }
                 statement.executeBatch();

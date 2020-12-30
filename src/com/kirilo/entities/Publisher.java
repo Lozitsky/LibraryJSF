@@ -1,28 +1,37 @@
 package com.kirilo.entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Access(AccessType.FIELD)
 public class Publisher {
-    private long id;
-    private String name;
-
     @Id
     @Column(name = "id")
-    public long getId() {
+    private Long id;
+    @Basic
+    @Column(name = "name")
+    private String name;
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL)
+    private List<Book> books;
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -36,8 +45,7 @@ public class Publisher {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Publisher publisher = (Publisher) o;
-        return id == publisher.id &&
-                Objects.equals(name, publisher.name);
+        return Objects.equals(id, publisher.id) && Objects.equals(name, publisher.name);
     }
 
     @Override
