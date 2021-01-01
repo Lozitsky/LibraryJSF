@@ -14,6 +14,6 @@ public class ReceiveBooksByLetter extends BaseCommand {
         String ch = getRequestParameters().get("letter_id").substring(0, 1);
         search.resetParameters();
         search.setSelectedChar(ch);
-        return bookList.getBooksByLetter(ch);
+        return controller.getBooksByLetter(ch);
     }
 }

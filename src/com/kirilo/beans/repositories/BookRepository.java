@@ -1,12 +1,13 @@
 package com.kirilo.beans.repositories;
 
+import com.kirilo.entities.Genre;
 import com.kirilo.entities.Book;
 import com.kirilo.enums.SearchType;
 
 import java.util.List;
 
 public interface BookRepository {
-    List<Book> getCurrentBooks();
+//    List<Book> getCurrentBooks();
 
     List<Book> getAllBooks();
 
@@ -18,7 +19,9 @@ public interface BookRepository {
 
     List<Book> getBooksFromSelectedPage();
 
-    void updateBooks();
+    void updateBooks(List<Book> books);
 
-    void setNumberOfBooksPerPage(int i);
+    List<Book> getBookListFromPage(int i);
+
+    List<Genre> getAllGenres();
 }

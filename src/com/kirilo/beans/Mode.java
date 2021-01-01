@@ -15,14 +15,14 @@ public class Mode implements Serializable {
 
     private boolean editMode;
     @ManagedProperty(value = "#{bookController}")
-    private BookController bookList;
+    private BookController controller;
 
-    public BookController getBookList() {
-        return bookList;
+    public BookController getController() {
+        return controller;
     }
 
-    public void setBookList(BookController bookList) {
-        this.bookList = bookList;
+    public void setController(BookController controller) {
+        this.controller = controller;
     }
 
     public boolean isEditMode() {
@@ -34,13 +34,13 @@ public class Mode implements Serializable {
     }
 
     public void save() {
-        bookList.updateBooks();
-        bookList.resetModeForAllBooks();
+        controller.updateBooks();
+        controller.resetModeForAllBooks();
         editMode = false;
     }
 
     public void cancel() {
-        bookList.resetModeForAllBooks();
+        controller.resetModeForAllBooks();
         editMode = false;
     }
 

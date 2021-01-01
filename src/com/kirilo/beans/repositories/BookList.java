@@ -9,9 +9,7 @@ import com.kirilo.entities.Genre;
 import com.kirilo.entities.Publisher;
 import com.kirilo.enums.SearchType;
 
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -60,12 +58,13 @@ public class BookList implements Serializable, BookRepository {
         this.search = search;
     }
 
-    public List<Book> getCurrentBooks() {
-        return books;
-    }
+//    public List<Book> getCurrentBooks() {
+//        return books;
+//    }
 
     private List<Book> getBooksFromDB(String query) {
         books.clear();
+
         try (
                 Statement statement = (Database.getConnection()).createStatement();
                 ResultSet resultSet = statement.executeQuery(query)
@@ -174,12 +173,17 @@ public class BookList implements Serializable, BookRepository {
         return checkAndGetBooks(currentSQL);
     }
 
-    public void setNumberOfBooksPerPage(int number) {
-        search.booksOnPageChanged(number);
-        checkAndGetBooks(currentSQL);
+    public List<Book> getBookListFromPage(int number) {
+//        search.booksOnPageChanged(number);
+        return checkAndGetBooks(currentSQL);
     }
 
-    public void updateBooks() {
+    @Override
+    public List<Genre> getAllGenres() {
+        return null;
+    }
+
+    public void updateBooks(List<Book> books) {
         try {
             try (PreparedStatement statement = Database.getConnection().prepareStatement(
                     "update book set name=?, isbn=?,  page_count=?, publish_year=?, description=? where id=?"

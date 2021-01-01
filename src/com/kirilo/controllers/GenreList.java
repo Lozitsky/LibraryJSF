@@ -1,22 +1,22 @@
 package com.kirilo.controllers;
 
-import com.kirilo.beans.Genre;
-import com.kirilo.db.Database;
+import com.kirilo.entities.Genre;
 
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @ManagedBean(eager = true)
-@ApplicationScoped
-public class GenreList {
+@SessionScoped
+public class GenreList implements Serializable {
+    private static final long serialVersionUID = 7698775746559496410L;
+
     private final List<Genre> genres;
+    @ManagedProperty(value = "#{bookController}")
+    private BookController controller;
 
     public GenreList() {
         genres = new ArrayList<>();
@@ -24,14 +24,27 @@ public class GenreList {
 //        genres.addAll(getGenresFromDB());
     }
 
+    public BookController getController() {
+        return controller;
+    }
+
+    public void setController(BookController controller) {
+        this.controller = controller;
+    }
+
     public List<Genre> getGenres() {
         if (genres.isEmpty()) {
-            return getGenresFromDB();
+            genres.addAll(getGenresFromDB());
         }
         return genres;
     }
 
     private List<Genre> getGenresFromDB() {
+        return controller.getGenreList();
+    }
+
+/*    private List<Genre> getGenresFromDB() {
+        final List<Genre> genres;
         try (
 //                Connection connection = Database.getConnection();
                 Statement statement = (Database.getConnection()).createStatement();
@@ -47,6 +60,7 @@ public class GenreList {
         } catch (SQLException throwables) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Can't get genres from DB!", throwables);
         }
+
         return genres;
-    }
+    }*/
 }

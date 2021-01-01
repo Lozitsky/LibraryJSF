@@ -12,6 +12,6 @@ public class ReceiveAllBooks extends BaseCommand{
     @Override
     public List<Book> execute() {
         search.resetParameters();
-        return bookList.getAllBooks();
+        return controller.getAllBooks();
     }
 }

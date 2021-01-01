@@ -14,7 +14,7 @@ public class Database {
     private static Connection connection;
 
     public static Connection getConnection() {
-        try {
+/*        try {
             if (connection != null) {
                 return connection;
             }
@@ -27,7 +27,7 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Error connection!", e);
         } catch (SQLException throwables) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "SQL Exception!", throwables);
-        }
+        }*/
         return connection;
     }
 }

@@ -6,7 +6,22 @@ import java.util.Objects;
 
 // https://ci.apache.org/projects/openjpa/2.2.x/docbook/jpa_overview_meta_field.html/
 // https://www.baeldung.com/jpa-basic-annotation#why-use
-
+// https://www.baeldung.com/jpa-entity-graph
+@NamedEntityGraph(
+        name = "book-author-genre-publisher",
+        attributeNodes = {
+                @NamedAttributeNode("author"),
+                @NamedAttributeNode("publisher"),
+                @NamedAttributeNode("genre"),
+        }
+)
+@NamedEntityGraph(
+        name = "book-author-publisher",
+        attributeNodes = {
+                @NamedAttributeNode("author"),
+                @NamedAttributeNode("publisher"),
+        }
+)
 @Entity
 @Access(AccessType.FIELD)
 public class Book {
@@ -16,6 +31,7 @@ public class Book {
     @Basic
     @Column(name = "name")
     private String name;
+    @Lob
     @Basic(optional = false, fetch = FetchType.LAZY)
     @Column(name = "content")
     private byte[] content;
@@ -28,6 +44,7 @@ public class Book {
     @Basic
     @Column(name = "publish_year")
     private Integer publishYear;
+    @Lob
     @Basic(optional = false, fetch = FetchType.LAZY)
     @Column(name = "image")
     private byte[] image;

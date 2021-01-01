@@ -14,6 +14,6 @@ public class ReceiveBooksByGenre extends BaseCommand {
         int id = Integer.parseInt(getRequestParameters().get("genre_id"));
         search.resetParameters();
         search.setSelectedGenre(id);
-        return bookList.getBooksByGenre(id);
+        return controller.getBooksByGenre(id);
     }
 }

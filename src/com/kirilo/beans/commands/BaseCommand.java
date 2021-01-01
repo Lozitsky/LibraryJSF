@@ -12,7 +12,7 @@ public abstract class BaseCommand implements Command, Serializable {
     private static final long serialVersionUID = 6183959340404573695L;
 
     @ManagedProperty(value = "#{bookController}")
-    protected BookController bookList;
+    protected BookController controller;
 
     public Search getSearch() {
         return search;
@@ -30,12 +30,12 @@ public abstract class BaseCommand implements Command, Serializable {
     public BaseCommand() {
     }
 
-    public BookController getBookList() {
-        return bookList;
+    public BookController getController() {
+        return controller;
     }
 
-    public void setBookList(BookController bookList) {
-        this.bookList = bookList;
+    public void setController(BookController controller) {
+        this.controller = controller;
     }
 
     @Override

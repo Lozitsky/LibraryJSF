@@ -2,7 +2,6 @@ package com.kirilo.beans.commands;
 
 import com.kirilo.controllers.SearchTypeChanger;
 import com.kirilo.entities.Book;
-import com.kirilo.enums.SearchType;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -29,6 +28,6 @@ public class ReceiveBooksByString extends BaseCommand {
         String s_string = search.getSearchString();
         search.resetParameters();
 
-        return bookList.getBooksByString(searchTypeChanger.getSearchType(), s_string);
+        return controller.getBooksByString(searchTypeChanger.getSearchType(), s_string);
     }
 }

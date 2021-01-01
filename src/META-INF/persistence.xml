@@ -6,19 +6,25 @@
   <persistence-unit name="Book">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <!--    <non-jta-data-source>LibraryJSF</non-jta-data-source>-->
+<!--    https://docs.oracle.com/cd/E19798-01/821-1841/bnbrj/index.html -->
+<!--    https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/cfgdepds005.htm -->
+    <jta-data-source>jdbc/Library</jta-data-source>
     <class>com.kirilo.entities.Author</class>
     <class>com.kirilo.entities.Book</class>
     <class>com.kirilo.entities.Genre</class>
     <class>com.kirilo.entities.Publisher</class>
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+<!--      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ebook_library?useSSL=false&amp;autoReconnect=true"/>
-      <!--      &amp;sessionVariables=wait_timeout=600-->
+      &lt;!&ndash;      &amp;sessionVariables=wait_timeout=600&ndash;&gt;
       <property name="javax.persistence.jdbc.user" value="admin_db"/>
       <property name="javax.persistence.jdbc.password" value="password"/>
-
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>-->
       <property name="hibernate.show_sql" value="true" />
+<!--      https://stackoverflow.com/questions/39846369/save-entity-using-entitymanager-not-working -->
+<!--      https://stackoverflow.com/a/32779248/9586230 -->
+      <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+      <property name="hibernate.current_session_context_class" value="thread"/>
     </properties>
   </persistence-unit>
 </persistence>
