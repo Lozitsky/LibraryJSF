@@ -1,6 +1,6 @@
 package com.kirilo.beans.repositories;
 
-import com.kirilo.controllers.Search;
+import com.kirilo.controllers.Pager;
 import com.kirilo.controllers.SearchTypeChanger;
 import com.kirilo.db.Database;
 import com.kirilo.entities.Author;
@@ -36,7 +36,7 @@ public class BookList implements Serializable, BookRepository {
     private SearchTypeChanger searchTypeChanger;
 
     @ManagedProperty(value = "#{search}")
-    private Search search;
+    private Pager pager;
 
     public BookList() {
         books = new ArrayList<>();
@@ -50,12 +50,12 @@ public class BookList implements Serializable, BookRepository {
         this.searchTypeChanger = searchTypeChanger;
     }
 
-    public Search getSearch() {
-        return search;
+    public Pager getSearch() {
+        return pager;
     }
 
-    public void setSearch(Search search) {
-        this.search = search;
+    public void setSearch(Pager pager) {
+        this.pager = pager;
     }
 
 //    public List<Book> getCurrentBooks() {
@@ -111,38 +111,38 @@ public class BookList implements Serializable, BookRepository {
     private List<Book> checkAndGetBooks(String sql) {
         String query = String.format("%s %s order by b.name", SELECT_ALL_FIELDS, sql);
 
-        final int count = getBooksCount(String.format(
+        final long count = getBooksCount(String.format(
                 "select count(*) from book b %s%s",
                 searchTypeChanger.getSearchType() == SearchType.AUTHOR ? "inner join author a on b.author_id=a.id " : "", sql
         ));
-        int pageCount = count / search.getBooksOnPage() + (count % search.getBooksOnPage() > 0 ? 1 : 0);
+        long pageCount = count / pager.getBooksOnPage() + (count % pager.getBooksOnPage() > 0 ? 1 : 0);
 
         if (pageCount > 1) {
-            if (pageCount != search.getListPageNumbers().size()) {
+            if (pageCount != pager.getListPageNumbers().size()) {
                 final ArrayList<Integer> list = new ArrayList<>();
                 for (int i = 0; i < pageCount; i++) {
                     list.add(i + 1);
                 }
-                search.setListPageNumbers(list);
+                pager.setListPageNumbers(list);
             }
             query = String.format(
                     "%s limit %d, %d",
-                    query, (search.getSelectedPage() - 1) * search.getBooksOnPage(), search.getBooksOnPage()
+                    query, (pager.getSelectedPage() - 1) * pager.getBooksOnPage(), pager.getBooksOnPage()
             );
         }
 
         if (sql.equals(currentSQL)) {
-            if (search.getTotalBooksCount() <= search.getSelectedPage()) {
+            if (pager.getTotalQuantityOfBooks() <= pager.getSelectedPage()) {
                 return books;
             }
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "sql == search.getCurrentSQL()" + query + "\n" + search.getSelectedPage());
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "sql == search.getCurrentSQL()" + query + "\n" + pager.getSelectedPage());
         } else {
             currentSQL = sql;
-            search.setTotalBooksCount(count);
-            search.setSelectedPage(1);
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "pagecount == " + pageCount + "\n" + query + "\n" + search.getSelectedPage());
+            pager.setTotalQuantityOfBooks(count);
+            pager.setSelectedPage(1);
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "pagecount == " + pageCount + "\n" + query + "\n" + pager.getSelectedPage());
         }
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Count of pages: " + search.getListPageNumbers());
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Count of pages: " + pager.getListPageNumbers());
         return getBooksFromDB(query);
     }
 
@@ -169,7 +169,7 @@ public class BookList implements Serializable, BookRepository {
         return checkAndGetBooks(sql);
     }
 
-    public List<Book> getBooksFromSelectedPage() {
+    public List<Book> getBooksFromCurrentPage() {
         return checkAndGetBooks(currentSQL);
     }
 
@@ -180,6 +180,61 @@ public class BookList implements Serializable, BookRepository {
 
     @Override
     public List<Genre> getAllGenres() {
+        return null;
+    }
+
+    @Override
+    public List<byte[]> getImage(Long... collect) {
+        return null;
+    }
+
+    @Override
+    public List<byte[]> getContent(Long... array) {
+        return null;
+    }
+
+    @Override
+    public Book getBook(Long value) {
+        return null;
+    }
+
+    @Override
+    public Long getQuantityOfBooks() {
+        return null;
+    }
+
+    @Override
+    public List<Book> getBooks(int first, int items) {
+        return null;
+    }
+
+    @Override
+    public List<Book> getBooksByGenre(int id, int first, int items) {
+        return null;
+    }
+
+    @Override
+    public List<Book> getBooksByString(SearchType searchType, String searchString, int first, int items) {
+        return null;
+    }
+
+    @Override
+    public List<Book> getBooksByLetter(String ch, int first, int items) {
+        return null;
+    }
+
+    @Override
+    public Long getQuantityOfBooksByLetter(String ch) {
+        return null;
+    }
+
+    @Override
+    public Long getQuantityOfBooksByGenre(int id) {
+        return null;
+    }
+
+    @Override
+    public Long getQuantityOfBooksByString(SearchType searchType, String sString) {
         return null;
     }
 

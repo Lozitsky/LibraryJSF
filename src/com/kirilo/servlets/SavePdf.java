@@ -1,6 +1,6 @@
 package com.kirilo.servlets;
 
-import com.kirilo.db.DataHelper;
+import com.kirilo.controllers.BookController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,10 +38,10 @@ public class SavePdf extends HttpServlet {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Can't load book content from DB id=" + id, throwables);
         }*/
 
-        final DataHelper dataHelper = (DataHelper) req.getSession().getAttribute("dataHelper");
+        final BookController controller = (BookController) req.getSession().getAttribute("bookController");
 
         try (OutputStream out = resp.getOutputStream()) {
-            byte[] content = dataHelper.getContent(Long.valueOf(id));
+            byte[] content = controller.getContent(Long.valueOf(id));
             ByteArrayInputStream in = new ByteArrayInputStream(content);
             byte[] bytes = new byte[1024];
 

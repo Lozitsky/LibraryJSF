@@ -1,9 +1,9 @@
 package com.kirilo.db;
 
-import com.kirilo.entities.Genre;
 import com.kirilo.beans.repositories.BookRepository;
 import com.kirilo.entities.Author;
 import com.kirilo.entities.Book;
+import com.kirilo.entities.Genre;
 import com.kirilo.entities.Publisher;
 import com.kirilo.enums.SearchType;
 
@@ -13,71 +13,92 @@ import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@ManagedBean(name = "dataHelper", eager = true)
+@ManagedBean(name = "dataHelper", eager = false)
 @SessionScoped
 public class DataHelper implements BookRepository, Serializable {
     private static final long serialVersionUID = 8210136158520619911L;
     private final EntityManagerFactory emf;
-    //    private final EntityManager em;
     private final CriteriaBuilder cb;
 
     public DataHelper() {
         emf = Persistence.createEntityManagerFactory("Book");
-//        em = emf.createEntityManager();
         cb = emf.getCriteriaBuilder();
+        CriteriaQuery<Long> q = cb.createQuery(Long.class);
     }
 
     @Override
     public List<Book> getAllBooks() {
-        CriteriaQuery<Book> q = cb.createQuery(Book.class);
-        Root<Book> book = q.from(Book.class);
-        /*return (List<Book>)em.createQuery("select b from Book b left join fetch b.author a left join fetch b.genre g left join fetch b.publisher p " +
-                "where b.author.id = a.id and b.publisher.id = p.id and b.genre.id = g.id order by b.name").getResultList();
-        */
-/*        Fetch<List<Book>, Author> author = book.fetch("author", JoinType.LEFT);
-        Fetch<Book, Genre> genre = book.fetch("genre", JoinType.LEFT);
-        Fetch<Book, Publisher> publisher = book.fetch("publisher", JoinType.LEFT);*/
+        return getBooks(0, Integer.MAX_VALUE);
+    }
 
-        q.select(book);
-        return getBookAuthorPublisher(q);
+    @Override
+    public List<Book> getBooks(int first, int items) {
+        final CriteriaQuery<Book> q = cb.createQuery(Book.class);
+        final Root<Book> book = q.from(Book.class);
+        q.orderBy(cb.desc(book.get("name")));
+
+        return getBooksImageAuthorPublisherByPage(q, first, items);
+    }
+
+    @Override
+    public List<Book> getBooksByGenre(int id, int first, int items) {
+        final CriteriaQuery<Book> q = cb.createQuery(Book.class);
+        final Root<Book> book = q.from(Book.class);
+
+        q.where(getEqualGenreId(book, id));
+        q.orderBy(cb.desc(book.get("name")));
+
+        return getBooksImageAuthorPublisherByPage(q,first, items);
     }
 
     @Override
     public List<Book> getBooksByGenre(int id) {
-        CriteriaQuery<Book> q = cb.createQuery(Book.class);
-        Root<Book> book = q.from(Book.class);
-
-        q.where(cb.equal(book.get("genre").get("id"), id));
-        return getBookAuthorPublisher(q);
+        return getBooksByGenre(id, 0, Integer.MAX_VALUE);
     }
 
     @Override
-    public List<Book> getBooksByLetter(String ch) {
-        CriteriaQuery<Book> q = cb.createQuery(Book.class);
-        Root<Book> book = q.from(Book.class);
-
-        q.where(cb.like(book.get("name"), ch.toLowerCase() + "%"));
-        return getBookAuthorPublisher(q);
+    public List<Book> getBooksByString(SearchType searchType, String searchString, int first, int items) {
+        final CriteriaQuery<Book> q = cb.createQuery(Book.class);
+        final Root<Book> book = q.from(Book.class);
+        q.where(getLikeType(searchType, searchString, book));
+        return getBooksImageAuthorPublisherByPage(q,first, items);
     }
 
     @Override
     public List<Book> getBooksByString(SearchType searchType, String s_string) {
-        CriteriaQuery<Book> q = cb.createQuery(Book.class);
-        Root<Book> book = q.from(Book.class);
+        return getBooksByString(searchType, s_string, 0, Integer.MAX_VALUE);
+    }
 
-        Path<String> expression;
-        switch (searchType) {
-            case AUTHOR:
-                expression = book.get("author").get("fullName");
-                break;
-            default:
-                expression = book.get("name");
-                break;
-        }
-        q.where(cb.like(expression, "%" + s_string.toLowerCase() + "%"));
+    @Override
+    public List<Book> getBooksByLetter(String ch, int first, int items) {
+        final CriteriaQuery<Book> q = cb.createQuery(Book.class);
+        final Root<Book> book = q.from(Book.class);
+        q.where(getLikeBookName(ch, book));
+        return getBooksImageAuthorPublisherByPage(q,first, items);
+    }
 
-        return getBookAuthorPublisher(q);
+    @Override
+    public List<Book> getBooksByLetter(String ch) {
+        return getBooksByLetter(ch, 0, Integer.MAX_VALUE);
+    }
+
+    private Predicate getEqualGenreId(Root<?> root, int id) {
+        return cb.equal(root.get("genre").get("id"), id);
+    }
+
+    private Predicate getLikeBookName(String ch, Root<Book> book) {
+        return cb.like(book.get("name"), ch.toLowerCase() + "%");
+    }
+
+    private Predicate getLikeType(SearchType searchType, String s_string, Root<Book> book) {
+        return cb.like(
+                searchType == SearchType.AUTHOR
+                        ? book.get("author").get("fullName")
+                        : book.get("name"),
+                "%" + s_string.toLowerCase() + "%");
     }
 
     private List<Book> getBookList(CriteriaQuery<Book> q) {
@@ -85,7 +106,6 @@ public class DataHelper implements BookRepository, Serializable {
         em.getTransaction().begin();
         final List<Book> resultList = em.createQuery(q).getResultList();
         em.getTransaction().commit();
-        em.close();
         return resultList;
     }
 
@@ -93,26 +113,43 @@ public class DataHelper implements BookRepository, Serializable {
         return getBookListEager(query, "book-author-genre-publisher");
     }
 
-    private List<Book> getBookAuthorPublisher(CriteriaQuery<Book> query) {
+    private List<Book> getBooksAuthorPublisher(CriteriaQuery<Book> query) {
         return getBookListEager(query, "book-author-publisher");
     }
 
+    private List<Book> getBooksImageAuthorPublisher(CriteriaQuery<Book> query) {
+        return getBookListEager(query, "book.image-author-publisher");
+    }
+
+    private List<Book> getBooksImageAuthorPublisherByPage(CriteriaQuery<Book> query, int first, int items) {
+        return getBookListEager(query, "book.image-author-publisher", first, items);
+    }
+
     private List<Book> getBookListEager(CriteriaQuery<Book> q, String entity_Graph) {
+        return getBookListEager(q, entity_Graph, 0, Integer.MAX_VALUE);
+    }
+
+    private List<Book> getBookListEager(CriteriaQuery<Book> q, String entity_Graph, int first, int items) {
         final EntityManager em = emf.createEntityManager();
         final EntityGraph<?> entityGraph = em.getEntityGraph(entity_Graph);
         em.getTransaction().begin();
+
         final TypedQuery<Book> query = em.createQuery(q)
-                .setHint("javax.persistence.loadgraph", entityGraph);
+                .setHint("javax.persistence.loadgraph", entityGraph)
+                .setMaxResults(items)
+                .setFirstResult(first);
+
         final List<Book> resultList = query.getResultList();
+        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "list of Books: " + resultList.size());
         em.getTransaction().commit();
-        em.close();
         return resultList;
     }
 
     @Override
-    public List<Book> getBooksFromSelectedPage() {
+    public List<Book> getBooksFromCurrentPage() {
         return null;
     }
+
 
     @Override
     public void updateBooks(List<Book> books) {
@@ -122,9 +159,6 @@ public class DataHelper implements BookRepository, Serializable {
 
         final CriteriaUpdate<Author> upAuthor = cb.createCriteriaUpdate(Author.class);
         final Root<Author> a = upAuthor.from(Author.class);
-
-//        final CriteriaUpdate<Genre> upGenre = cb.createCriteriaUpdate(Genre.class);
-//        final Root<Genre> g = upGenre.from(Genre.class);
 
         final CriteriaUpdate<Publisher> upPublisher = cb.createCriteriaUpdate(Publisher.class);
         final Root<Publisher> p = upPublisher.from(Publisher.class);
@@ -169,7 +203,6 @@ public class DataHelper implements BookRepository, Serializable {
 
             em.getTransaction().commit();
         }
-        em.close();
     }
 
     @Override
@@ -179,7 +212,6 @@ public class DataHelper implements BookRepository, Serializable {
 
     @Override
     public List<Genre> getAllGenres() {
-//        em.createQuery.("select g from Genre g")
         final CriteriaQuery<Genre> q = cb.createQuery(Genre.class);
         final Root<Genre> genre = q.from(Genre.class);
         q.select(genre);
@@ -187,36 +219,100 @@ public class DataHelper implements BookRepository, Serializable {
         em.getTransaction().begin();
         final List<Genre> resultList = em.createQuery(q).getResultList();
         em.getTransaction().commit();
-        em.close();
         return resultList;
     }
 
-    public byte[] getImage(Long id) {
+    public List<byte[]> getImage(Long... id) {
         return getObjectFromField("image", id);
     }
 
-    public byte[] getContent(Long id) {
+    public List<byte[]> getContent(Long... id) {
         return getObjectFromField("content", id);
     }
 
-    private byte[] getObjectFromField(String field, Long id) {
+    @Override
+    public Book getBook(Long id) {
+        CriteriaQuery<Book> q = cb.createQuery(Book.class);
+        Root<Book> book = q.from(Book.class);
+        q.where(cb.equal(book.get("id"), id));
+        final EntityManager em = emf.createEntityManager();
+        final EntityGraph<?> entityGraph = em.getEntityGraph("book.image-author-publisher");
+        em.getTransaction().begin();
+        final TypedQuery<Book> query = em.createQuery(q)
+                .setHint("javax.persistence.loadgraph", entityGraph);
+        final Book result = query.getSingleResult();
+        em.getTransaction().commit();
+        return result;
+    }
+
+    @Override
+    public Long getQuantityOfBooksByLetter(String ch) {
+        final CriteriaQuery<Long> q = cb.createQuery(Long.class);
+        final Root<Book> book = q.from(Book.class);
+        return getQuantityOfBooksByPredicate(q, book, getLikeBookName(ch, book));
+    }
+
+    @Override
+    public Long getQuantityOfBooks() {
+        final CriteriaQuery<Long> q = cb.createQuery(Long.class);
+        final Root<Book> book = q.from(Book.class);
+        return getQuantityOfBooksByPredicate(q, book);
+    }
+
+    @Override
+    public Long getQuantityOfBooksByGenre(int id) {
+        final CriteriaQuery<Long> q = cb.createQuery(Long.class);
+        final Root<Book> book = q.from(Book.class);
+
+        return getQuantityOfBooksByPredicate(q, book, getEqualGenreId(book, id));
+    }
+
+    @Override
+    public Long getQuantityOfBooksByString(SearchType searchType, String sString) {
+        final CriteriaQuery<Long> q = cb.createQuery(Long.class);
+        final Root<Book> book = q.from(Book.class);
+
+        return getQuantityOfBooksByPredicate(q, book, getLikeType(searchType, sString, book));
+    }
+
+    private Long getQuantityOfBooksByPredicate(CriteriaQuery<Long> q, Root<?> root) {
+        return getQuantityOfBooksByPredicate(q, root, cb.conjunction());
+    }
+
+    private Long getQuantityOfBooksByPredicate(CriteriaQuery<Long> q, Root<?> root, Predicate predicate) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        q.select(cb.count(root.get("id")));
+        q.where(predicate);
+        final Long result = em.createQuery(q).getSingleResult();
+        em.getTransaction().commit();
+        return result;
+    }
+
+    private List<Book> getBooksFromTo(int first, int items, CriteriaQuery<Book> q) {
+        final EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        final List<Book> resultList = em.createQuery(q)
+                .setMaxResults(items)
+                .setFirstResult(first)
+                .getResultList();
+        em.getTransaction().commit();
+        return resultList;
+    }
+
+    private List<byte[]> getObjectFromField(String field, Long... ids) {
         final EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         CriteriaQuery<byte[]> q = cb.createQuery(byte[].class);
         Root<Book> book = q.from(Book.class);
-        q.select(book.get(field)).where(cb.equal(book.get("id"), id));
-        byte[] singleResult = em.createQuery(q).getSingleResult();
+        final CriteriaBuilder.In<Long> inClause = cb.in(book.get("id"));
+        q.select(book.get(field)).where(inClause);
+        for (Long id : ids) {
+            inClause.value(id);
+        }
+        final List<byte[]> resultList = em.createQuery(q).getResultList();
 
-/*        byte[] singleResult = em.createQuery(
-                "select b.image from Book b where b.id = :id", byte[].class)
-                .setParameter("id", id)
-                .getSingleResult();*/
-
-
-/*        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Is null? " + (singleResult == null) + "\n" + id +
-                "\n" + (singleResult != null ? "not null" : null));*/
         em.getTransaction().commit();
-        em.close();
-        return singleResult;
+        return resultList;
     }
 }

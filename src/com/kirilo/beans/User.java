@@ -1,7 +1,10 @@
 package com.kirilo.beans;
 
+import com.kirilo.controllers.BookController;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
@@ -17,6 +20,17 @@ public class User implements Serializable {
 
     private String username;
     private String password;
+
+    public BookController getController() {
+        return controller;
+    }
+
+    public void setController(BookController controller) {
+        this.controller = controller;
+    }
+
+    @ManagedProperty(value = "#{bookController}")
+    private BookController controller;
 
     public User() {
     }
@@ -46,6 +60,8 @@ public class User implements Serializable {
 
         try {
             ((HttpServletRequest) (context.getExternalContext().getRequest())).login(username, password);
+            controller.changeQuantityOfBooks();
+            controller.getBooksFromSelectedPage();
             return "books";
         } catch (ServletException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Can't login!", e);

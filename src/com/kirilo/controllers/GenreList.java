@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ManagedBean(eager = true)
+@ManagedBean(eager = false)
 @SessionScoped
 public class GenreList implements Serializable {
     private static final long serialVersionUID = 7698775746559496410L;

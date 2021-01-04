@@ -22,6 +22,21 @@ import java.util.Objects;
                 @NamedAttributeNode("publisher"),
         }
 )
+@NamedEntityGraph(
+        name = "book.image-author-publisher",
+        attributeNodes = {
+                @NamedAttributeNode("author"),
+                @NamedAttributeNode("publisher"),
+                @NamedAttributeNode("image"),
+        }
+)
+@NamedEntityGraph(
+        name = "book.image",
+        attributeNodes = {
+                @NamedAttributeNode("image"),
+        }
+)
+
 @Entity
 @Access(AccessType.FIELD)
 public class Book {

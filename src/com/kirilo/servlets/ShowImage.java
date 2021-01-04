@@ -1,5 +1,6 @@
 package com.kirilo.servlets;
 
+import com.kirilo.controllers.BookController;
 import com.kirilo.db.DataHelper;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,18 +20,23 @@ public class ShowImage extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("image/jpeg");
         String id = req.getParameter("id");
-        final DataHelper dataHelper = (DataHelper) req.getSession().getAttribute("dataHelper");
+//        final DataHelper dataHelper = (DataHelper) req.getSession().getAttribute("dataHelper");
+        final BookController controller = (BookController) req.getSession().getAttribute("bookController");
 
         try (OutputStream out = resp.getOutputStream()) {
-            byte[] image = dataHelper.getImage(Long.valueOf(id));
+//            final List<byte[]> image = controller.getImage(Long.valueOf(id));
+            final byte[] image = controller.getImage(Long.valueOf(id));
+//            https://stackoverflow.com/questions/55709/streaming-large-files-in-a-java-servlet
+//            https://stackoverflow.com/questions/1802123/can-we-convert-a-byte-array-into-an-inputstream-in-java
             ByteArrayInputStream in = new ByteArrayInputStream(image);
-            byte[] bytes = new byte[1024];
-            int bytesRead;
+                byte[] bytes = new byte[1024];
+                int bytesRead;
 
-            while ((bytesRead = in.read(bytes)) != -1) {
-                out.write(bytes, 0, bytesRead);
-            }
-            out.write(image);
+                while ((bytesRead = in.read(bytes)) != -1) {
+                    out.write(bytes, 0, bytesRead);
+                }
+                out.write(image);
+
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Can't load book picture from DB id=" + id, ex);
         }

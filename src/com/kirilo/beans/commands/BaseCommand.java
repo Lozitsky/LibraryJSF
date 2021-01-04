@@ -1,7 +1,7 @@
 package com.kirilo.beans.commands;
 
 import com.kirilo.controllers.BookController;
-import com.kirilo.controllers.Search;
+import com.kirilo.controllers.Pager;
 
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
@@ -14,16 +14,16 @@ public abstract class BaseCommand implements Command, Serializable {
     @ManagedProperty(value = "#{bookController}")
     protected BookController controller;
 
-    public Search getSearch() {
-        return search;
+    public Pager getPager() {
+        return pager;
     }
 
-    public void setSearch(Search search) {
-        this.search = search;
+    public void setPager(Pager pager) {
+        this.pager = pager;
     }
 
-    @ManagedProperty(value = "#{search}")
-    protected Search search;
+    @ManagedProperty(value = "#{pager}")
+    protected Pager pager;
     private String sqlQuery;
     private int itemsOnPage;
 
@@ -41,13 +41,13 @@ public abstract class BaseCommand implements Command, Serializable {
     @Override
     public void backup(String sql, int booksOnPage) {
 //        sqlQuery = search.getCurrentSQL();
-        itemsOnPage = search.getBooksOnPage();
+        itemsOnPage = pager.getBooksOnPage();
     }
 
     @Override
     public void undo() {
 //        search.setCurrentSQL(sqlQuery);
-        search.setBooksOnPage(itemsOnPage);
+        pager.setBooksOnPage(itemsOnPage);
     }
 
     protected Map<String, String> getRequestParameters() {

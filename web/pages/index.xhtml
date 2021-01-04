@@ -79,7 +79,6 @@
 <!--                <input type="hidden" name="from" value="#{requestScope['javax.servlet.forward.request_uri']}" />-->
                 <h:commandButton action="#{user.login}" value="#{msg['enter.button']}"
                                  onclick="return checkValue(this.form, `#{msg['login.required']}`);">
-                    <!--                    <f:param name="books" value="#{allBooks.execute()}"/>-->
 <!--                    https://stackoverflow.com/a/8024427/9586230 -->
                     <f:param name="redirect" value="#{requestScope['javax.servlet.forward.request_uri']}" />
                     <f:ajax onevent="showProgress" execute="@form" render="@form"/>

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-@ManagedBean(eager = true)
+@ManagedBean(eager = false)
 @SessionScoped
 public class SearchTypeChanger implements Serializable {
     private static final long serialVersionUID = 8340836521715812470L;

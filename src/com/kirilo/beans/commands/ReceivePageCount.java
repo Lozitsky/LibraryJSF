@@ -6,12 +6,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.util.List;
 
-@ManagedBean(name = "pageCount")
+@ManagedBean(name = "pageCount", eager = false)
 @SessionScoped
 public class ReceivePageCount extends BaseCommand {
     @Override
     public List<Book> execute() {
-        search.setSelectedPage(1);
+        pager.setSelectedPage(1);
+
         return controller.getBooksFromSelectedPage();
     }
 }
