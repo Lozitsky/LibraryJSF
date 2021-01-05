@@ -81,7 +81,7 @@
                                  onclick="return checkValue(this.form, `#{msg['login.required']}`);">
 <!--                    https://stackoverflow.com/a/8024427/9586230 -->
                     <f:param name="redirect" value="#{requestScope['javax.servlet.forward.request_uri']}" />
-                    <f:ajax onevent="showProgress" execute="@form" render="@form"/>
+<!--                    <f:ajax onevent="showProgress" event="keypress" execute="@form" render="@form :loading_wrapper"/>-->
                 </h:commandButton>
 
                 <p><h:message id="login_error" for="username" styleClass="error"/></p>

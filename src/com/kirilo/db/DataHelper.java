@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 @SessionScoped
 public class DataHelper implements BookRepository, Serializable {
     private static final long serialVersionUID = 8210136158520619911L;
-    private final EntityManagerFactory emf;
     private final CriteriaBuilder cb;
+    private final EntityManagerFactory emf;
 
     public DataHelper() {
         emf = Persistence.createEntityManagerFactory("Book");
@@ -51,7 +51,7 @@ public class DataHelper implements BookRepository, Serializable {
         q.where(getEqualGenreId(book, id));
         q.orderBy(cb.desc(book.get("name")));
 
-        return getBooksImageAuthorPublisherByPage(q,first, items);
+        return getBooksImageAuthorPublisherByPage(q, first, items);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class DataHelper implements BookRepository, Serializable {
         final CriteriaQuery<Book> q = cb.createQuery(Book.class);
         final Root<Book> book = q.from(Book.class);
         q.where(getLikeType(searchType, searchString, book));
-        return getBooksImageAuthorPublisherByPage(q,first, items);
+        return getBooksImageAuthorPublisherByPage(q, first, items);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DataHelper implements BookRepository, Serializable {
         final CriteriaQuery<Book> q = cb.createQuery(Book.class);
         final Root<Book> book = q.from(Book.class);
         q.where(getLikeBookName(ch, book));
-        return getBooksImageAuthorPublisherByPage(q,first, items);
+        return getBooksImageAuthorPublisherByPage(q, first, items);
     }
 
     @Override
@@ -178,8 +178,8 @@ public class DataHelper implements BookRepository, Serializable {
                     .set(b.get("pageCount"), book.getPageCount())
                     .set(b.get("isbn"), book.getIsbn())
                     .set(b.get("publishYear"), book.getPublishYear())
+                    .set(b.get("description"), book.getDescription())
                     .where(cb.equal(b.get("id"), book.getId()))
-//                    .set(b.get("description"), book.getDescription())
 //                    .set(b.get("rating"), book.getVoteCount())
             ;
             Query q = em.createQuery(update);

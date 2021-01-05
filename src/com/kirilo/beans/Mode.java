@@ -1,6 +1,8 @@
 package com.kirilo.beans;
 
 import com.kirilo.controllers.BookController;
+import com.kirilo.controllers.Pager;
+import org.jboss.logging.Logger;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -16,6 +18,26 @@ public class Mode implements Serializable {
     private boolean editMode;
     @ManagedProperty(value = "#{bookController}")
     private BookController controller;
+    @ManagedProperty("#{pager}")
+    private Pager pager;
+
+    public Pager getPager() {
+        return pager;
+    }
+
+    public void setPager(Pager pager) {
+        this.pager = pager;
+    }
+/*    @ManagedProperty(value = "#{pageCount}")
+    private Command command;
+
+    public Command getCommand() {
+        return command;
+    }
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }*/
 
     public BookController getController() {
         return controller;
@@ -34,8 +56,14 @@ public class Mode implements Serializable {
     }
 
     public void save() {
+        org.jboss.logging.Logger.getLogger(this.getClass().getName()).log(Logger.Level.INFO, "!!!\n" + pager.getListPageNumbers().size());
+
         controller.updateBooks();
         controller.resetModeForAllBooks();
+        controller.getBooksFromSelectedPage();
+        org.jboss.logging.Logger.getLogger(this.getClass().getName()).log(Logger.Level.INFO, "???\n"+ pager.getListPageNumbers().size());
+
+//        command.execute();
         editMode = false;
     }
 

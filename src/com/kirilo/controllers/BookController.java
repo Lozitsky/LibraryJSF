@@ -12,9 +12,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.event.ValueChangeEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // https://myfaces.apache.org/wiki/core/user-guide/jsf-and-myfaces-howtos/backend/accessing-one-managed-bean-from-another.html
 @ManagedBean(name = "bookController", eager = false)
@@ -22,7 +20,7 @@ import java.util.Map;
 public class BookController implements Serializable {
     private static final long serialVersionUID = 5392526366565724328L;
     private final List<Book> books;
-    private final Map<Long, byte[]> images;
+    //    private final Map<Long, byte[]> images;
     @ManagedProperty(value = "#{pager}")
     private Pager pager;
     @ManagedProperty(value = "#{dataHelper}")
@@ -32,7 +30,7 @@ public class BookController implements Serializable {
 
     public BookController() {
         books = new ArrayList<>();
-        images = new HashMap<>();
+//        images = new HashMap<>();
     }
 
     public SearchTypeChanger getSearchType() {
@@ -68,22 +66,18 @@ public class BookController implements Serializable {
     public List<Book> getAllBooks() {
         Logger.getLogger(this.getClass().getName()).log(Logger.Level.INFO, "Execute getAllBooks():\n");
         changeQuantityOfBooks();
-//        changeNumberOfPages(bookRepository.getQuantityOfBooks());
         return changeAndGetBooks(bookRepository.getAllBooks());
     }
 
     public List<Book> getBooks() {
         Logger.getLogger(this.getClass().getName()).log(Logger.Level.INFO, "Execute getAllBooks():\n");
         changeQuantityOfBooks();
-//        changeNumberOfPages(bookRepository.getQuantityOfBooks());
         return changeAndGetBooks(bookRepository.getBooks(getFirstItem(), getBooksOnPage()));
     }
 
     public List<Book> getBooksByGenre(int id) {
-        Logger.getLogger(this.getClass().getName()).log(Logger.Level.INFO, "Execute getBookByGenre():\n");
-//        changeQuantityOfBooksByGenre(id);
+        Logger.getLogger(this.getClass().getName()).log(Logger.Level.INFO, "Execute getBookByGenre():\n" + pager.getListPageNumbers().size());
         changeNumberOfPages(bookRepository.getQuantityOfBooksByGenre(id));
-//        return changeAndGetBooks(bookRepository.getBooksByGenre(id));
         return changeAndGetBooks(bookRepository.getBooksByGenre(id, getFirstItem(), getBooksOnPage()));
     }
 
@@ -107,20 +101,9 @@ public class BookController implements Serializable {
         return (pager.getSelectedPage() - 1) * getBooksOnPage();
     }
 
-/*    public List<Book> getBooksFromSelectedPage() {
-        Logger.getLogger(this.getClass().getName()).log(Logger.Level.INFO, "Execute getBooksFromSelectedPage():\n"
-                + "From page: " + (pager.getSelectedPage() - 1) * pager.getBooksOnPage() + "\n");
-        final List<Book> booksByPage = bookRepository.getBooks((pager.getSelectedPage() - 1) * pager.getBooksOnPage(), pager.getBooksOnPage());
-        books.clear();
-        books.addAll(booksByPage);
-        return books;
-        //        return changeAndGetBooks(bookRepository.getBooksFromCurrentPage());
-    }*/
-
     public void updateBooks() {
         Logger.getLogger(this.getClass().getName()).log(Logger.Level.INFO, "Execute updateBooks():\n" + books.size());
 
-//        books.updateBooks(books);
         bookRepository.updateBooks(books);
     }
 
@@ -134,7 +117,6 @@ public class BookController implements Serializable {
 
         int i = Integer.parseInt(valueChangeEvent.getNewValue().toString());
         pager.booksOnPageChanged(i);
-//        changeAndGetBooks(bookRepository.getBookListFromPage(i));
     }
 
     private List<Book> changeAndGetBooks(List<Book> b) {
@@ -152,11 +134,7 @@ public class BookController implements Serializable {
         return bookRepository.getImage(books.stream().map(Book::getId).toArray(Long[]::new));
     }
 
-    /*    public List<byte[]> getContent(Long value) {
-            return bookRepository.getContent(books.stream().map(Book::getId).toArray(Long[]::new));
-        }*/
     public byte[] getContent(Long value) {
-//        return bookRepository.getContent(value).get(0);
         return bookRepository.getBook(value).getContent();
     }
 
@@ -166,14 +144,8 @@ public class BookController implements Serializable {
     }
 
     public void changeQuantityOfBooks() {
-//        final Long count = bookRepository.getQuantityOfBooks();
         changeNumberOfPages(bookRepository.getQuantityOfBooks());
     }
-
-/*    public void changeQuantityOfBooksByGenre(int id) {
-//        final Long count = bookRepository.getQuantityOfBooksByGenre(id);
-        changeNumberOfPages(bookRepository.getQuantityOfBooksByGenre(id));
-    }*/
 
     private void changeNumberOfPages(Long count) {
         pager.setNumberOfPages(count);
@@ -181,28 +153,17 @@ public class BookController implements Serializable {
     }
 
     public List<Book> getBooksFromSelectedPage() {
-//        changeQuantityOfBooks();
-//        return changeAndGetBooks(bookRepository.getBooks(pager.getSelectedPage() * pager.getBooksOnPage() - 1, pager.getBooksOnPage()));
-        final List<Book> books;
+        Logger.getLogger(this.getClass().getName()).log(Logger.Level.INFO, "!!!pager.getBookSearch():\n" + pager.getBookSearch());
+
         switch (pager.getBookSearch()) {
             case GENRE:
-
-//                books = bookRepository.getBooksByGenre(pager.getSelectedGenre(), getFirstItem(), getBooksOnPage());
-                // break;
                 return getBooksByGenre(pager.getSelectedGenre());
             case STRING:
-                /*books = bookRepository.getBooksByString(searchType.getSearchType(), pager.getSearchString(), getFirstItem(), getBooksOnPage());
-                break;*/
                 return getBooksByString(searchType.getSearchType(), pager.getSearchString());
             case ALPHABET:
-                /*books = bookRepository.getBooksByLetter(pager.getSelectedChar(), getFirstItem(), getBooksOnPage());
-                break;*/
                 return getBooksByLetter(pager.getSelectedChar());
             default:
                 ALL:
-/*                changeQuantityOfBooks();
-                books = bookRepository.getBooks(getFirstItem(), getBooksOnPage());
-                break;*/
                 return getBooks();
         }
 

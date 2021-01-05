@@ -7,7 +7,6 @@ import com.kirilo.enums.SearchType;
 import java.util.List;
 
 public interface BookRepository {
-//    List<Book> getCurrentBooks();
 
     List<Book> getAllBooks();
 

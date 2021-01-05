@@ -33,14 +33,16 @@
                     <strong>#{msg['welcome.info']}, #{user.username}</strong>
                 </div>
                 <h:form>
-                    <h:selectOneMenu value="#{locale.language}" onchange="submit()">
-                        <f:selectItem itemValue="ua" itemLabel="Українська"/>
-                        <f:selectItem itemValue="en" itemLabel="English"/>
-                        <f:selectItem itemValue="ru" itemLabel="Русский"/>
-                    </h:selectOneMenu>
+                    <f:ajax onevent="showProgress" event="click" execute="@form" render="@form :loading_wrapper">
+                        <h:selectOneMenu value="#{locale.language}" onchange="submit()">
+                            <f:selectItem itemValue="ua" itemLabel="Українська"/>
+                            <f:selectItem itemValue="en" itemLabel="English"/>
+                            <f:selectItem itemValue="ru" itemLabel="Русский"/>
+                        </h:selectOneMenu>
+                    </f:ajax>
                 </h:form>
                 <h:form class="move-right">
-<!--                    action="#{loginController.goToIndex}"-->
+                    <!--                    action="#{loginController.goToIndex}"-->
                     <h:commandLink action="#{user.logout}"
                                    value="#{msg['exit']}"/>
                 </h:form>

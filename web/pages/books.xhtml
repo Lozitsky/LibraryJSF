@@ -32,7 +32,7 @@
         </ui:define>
 
         <ui:define name="count">
-            <strong>#{msg['book.count']} #{pager.totalQuantityOfBooks}</strong>
+            <strong id="count_of_page">#{msg['book.count']} #{pager.totalQuantityOfBooks}</strong>
         </ui:define>
 
         <ui:define name="edit_mode">
@@ -43,16 +43,18 @@
 
         <ui:define name="content">
             <!--            https://stackoverflow.com/a/29056931/9586230 -->
+            <f:ajax execute="@form" onevent="showProgress" render="@form :count_of_page :count_down :count_top">
 
-            <h:commandButton value="Edit" action="#{mode.edit}" rendered="#{request.isUserInRole('admin') and not mode.editMode}">
-                <f:ajax execute="@form" onevent="showProgress" render="@form"/>
-            </h:commandButton>
-            <h:commandButton value="Save" action="#{mode.save}" rendered="#{mode.editMode}">
-                <f:ajax execute="@form" onevent="showProgress" render="@form"/>
-            </h:commandButton>
-            <h:commandButton immediate="true" value="Exit" action="#{mode.cancel}" rendered="#{mode.editMode}">
-                <f:ajax execute="@form" onevent="showProgress" render="@form"/>
-            </h:commandButton>
+                <h:commandButton value="Edit" action="#{mode.edit}"
+                                 rendered="#{request.isUserInRole('admin') and not mode.editMode and pager.totalQuantityOfBooks > 0}">
+                </h:commandButton>
+                <h:commandButton value="Save" action="#{mode.save}" rendered="#{mode.editMode}">
+                    <!--                <f:ajax execute="@form" onevent="showProgress" render="@form"/>-->
+                </h:commandButton>
+                <h:commandButton immediate="true" value="Exit" action="#{mode.cancel}" rendered="#{mode.editMode}">
+                    <!--                <f:ajax execute="@form" onevent="showProgress" render="@form"/>-->
+                </h:commandButton>
+            </f:ajax>
 
             <h:dataTable id="book_list" value="#{bookController.getCurrentBooks()}" var="book" cellspacing="10px"
                          columnClasses="book1, book2, book3, book4" styleClass="books">
@@ -129,8 +131,10 @@
         </ui:define>
 
         <ui:define name="paginator">
-            <h:form styleClass="pager" rendered="true">
-                <h:selectOneMenu value="#{pager.booksOnPage}" valueChangeListener="#{bookController.changeNumberOfBooksPerPage}">
+            <h:form styleClass="pager" rendered="#{pager.totalQuantityOfBooks > 2}">
+                    Books on page:
+                <h:selectOneMenu value="#{pager.booksOnPage}"
+                                 valueChangeListener="#{bookController.changeNumberOfBooksPerPage}">
                     <f:selectItem itemValue="2"/>
                     <f:selectItem itemValue="5"/>
                     <f:selectItem itemValue="10"/>

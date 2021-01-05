@@ -13,6 +13,12 @@ public abstract class BaseCommand implements Command, Serializable {
 
     @ManagedProperty(value = "#{bookController}")
     protected BookController controller;
+    @ManagedProperty(value = "#{pager}")
+    protected Pager pager;
+    private String sqlQuery;
+    private int itemsOnPage;
+    public BaseCommand() {
+    }
 
     public Pager getPager() {
         return pager;
@@ -20,14 +26,6 @@ public abstract class BaseCommand implements Command, Serializable {
 
     public void setPager(Pager pager) {
         this.pager = pager;
-    }
-
-    @ManagedProperty(value = "#{pager}")
-    protected Pager pager;
-    private String sqlQuery;
-    private int itemsOnPage;
-
-    public BaseCommand() {
     }
 
     public BookController getController() {

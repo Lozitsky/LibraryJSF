@@ -3,33 +3,37 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
-  <persistence-unit name="Book">
-    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-    <!--    <non-jta-data-source>LibraryJSF</non-jta-data-source>-->
-<!--    https://docs.oracle.com/cd/E19798-01/821-1841/bnbrj/index.html -->
-<!--    https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/cfgdepds005.htm -->
-    <jta-data-source>jdbc/Library</jta-data-source>
-    <class>com.kirilo.entities.Author</class>
-    <class>com.kirilo.entities.Book</class>
-    <class>com.kirilo.entities.Genre</class>
-    <class>com.kirilo.entities.Publisher</class>
-    <properties>
-<!--      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ebook_library?useSSL=false&amp;autoReconnect=true"/>
-      &lt;!&ndash;      &amp;sessionVariables=wait_timeout=600&ndash;&gt;
-      <property name="javax.persistence.jdbc.user" value="admin_db"/>
-      <property name="javax.persistence.jdbc.password" value="password"/>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>-->
-<!--        https://stackoverflow.com/questions/2536829/hibernate-show-real-sql/2536835 -->
-        <property name="hibernate.show_sql" value="true"/>
-        <property name="hibernate.format_sql" value="true"/>
-        <property name="hibernate.use_sql_comments" value="true"/>
+    <persistence-unit name="Book" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!--    <non-jta-data-source>LibraryJSF</non-jta-data-source>-->
+        <!--    https://docs.oracle.com/cd/E19798-01/821-1841/bnbrj/index.html -->
+        <!--    https://docs.oracle.com/cd/E16439_01/doc.1013/e13981/cfgdepds005.htm -->
+        <jta-data-source>jdbc/Library</jta-data-source>
+
+        <class>com.kirilo.entities.Author</class>
+        <class>com.kirilo.entities.Book</class>
+        <class>com.kirilo.entities.Genre</class>
+        <class>com.kirilo.entities.Publisher</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <shared-cache-mode>NONE</shared-cache-mode>
+        <properties>
+            <!--      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+                  <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ebook_library?useSSL=false&amp;autoReconnect=true"/>
+                  &lt;!&ndash;      &amp;sessionVariables=wait_timeout=600&ndash;&gt;
+                  <property name="javax.persistence.jdbc.user" value="admin_db"/>
+                  <property name="javax.persistence.jdbc.password" value="password"/>
+                  <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>-->
+            <!--        https://stackoverflow.com/questions/2536829/hibernate-show-real-sql/2536835 -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
 
 
-        <!--      https://stackoverflow.com/questions/39846369/save-entity-using-entitymanager-not-working -->
-<!--      https://stackoverflow.com/a/32779248/9586230 -->
-      <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
-<!--      <property name="hibernate.current_session_context_class" value="thread"/>-->
-    </properties>
-  </persistence-unit>
+            <!--      https://stackoverflow.com/questions/39846369/save-entity-using-entitymanager-not-working -->
+            <!--      https://stackoverflow.com/a/32779248/9586230 -->
+            <property name="hibernate.transaction.jta.platform"
+                      value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+            <!--      <property name="hibernate.current_session_context_class" value="thread"/>-->
+        </properties>
+    </persistence-unit>
 </persistence>
